@@ -121,10 +121,17 @@ const validate = () => {
 const handleSave = () => {
   if (!validate()) return;
   
+  const payload: any = { ...form };
+  
+  // If in edit mode and password is empty, remove it so it doesn't try to update it
+  if (isEditMode.value && !payload.password) {
+    delete payload.password;
+  }
+
   if (isEditMode.value) {
-    emit('update', { ...form });
+    emit('update', payload);
   } else {
-    emit('save', { ...form });
+    emit('save', payload);
   }
 };
 </script>

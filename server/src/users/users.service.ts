@@ -40,7 +40,21 @@ export class UsersService {
     return null;
   }
 
+  async findOneByEmail(email: string) {
+    return this.prisma.user.findUnique({ where: { email } });
+  }
+
   async update(id: number, updateUserDto: UpdateUserDto) {
+    // If password is provided but empty, remove it to prevent overwriting with empty string
+    if (updateUserDto.password === '' || updateUserDto.password === undefined || updateUserDto.password === null) {
+      delete updateUserDto.password;
+    }
+
+    // If password is provided and not empty, hash it
+    if (updateUserDto.password) {
+      updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
+    }
+
     try {
       return await this.prisma.user.update({
         where: { id },

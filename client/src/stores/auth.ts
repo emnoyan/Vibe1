@@ -1,0 +1,117 @@
+import { defineStore } from 'pinia';
+import { ref, computed } from 'vue';
+import axios from '@/plugins/axios';
+import router from '@/router';
+import { useUsersStore } from '@/stores/users';
+import { ability } from '@/plugins/ability';
+import { AbilityBuilder, createMongoAbility } from '@casl/ability';
+
+interface User {
+    id: number;
+    email: string;
+    name: string;
+    role: 'ADMIN' | 'USER';
+    status: string;
+}
+
+export const useAuthStore = defineStore('auth', () => {
+    const user = ref<User | null>(JSON.parse(localStorage.getItem('user') || 'null'));
+    const token = ref<string | null>(localStorage.getItem('token') || null);
+    const error = ref<string | null>(null);
+    const loading = ref(false);
+
+    const isAuthenticated = computed(() => !!token.value);
+    const isAdmin = computed(() => user.value?.role === 'ADMIN');
+
+    function updateAbility(user: User | null) {
+        const { can, rules } = new AbilityBuilder(createMongoAbility);
+
+        if (user?.role === 'ADMIN') {
+            can('manage', 'all');
+        } else {
+            can('read', 'User');
+        }
+
+        ability.update(rules);
+    }
+
+    if (user.value) {
+        updateAbility(user.value);
+    }
+
+    async function login(email: string, password: string) {
+        loading.value = true;
+        error.value = null;
+        try {
+            const response = await axios.post('/auth/login', { email, password });
+            const { access_token, user: userData } = response.data;
+
+            token.value = access_token;
+            user.value = userData;
+
+            localStorage.setItem('token', access_token);
+            localStorage.setItem('user', JSON.stringify(userData));
+
+            updateAbility(userData);
+
+            await router.push('/users');
+        } catch (err: any) {
+            error.value = err.response?.data?.message || 'Login failed';
+            console.error(err);
+        } finally {
+            loading.value = false;
+        }
+    }
+
+    async function register(name: string, email: string, password: string) {
+        loading.value = true;
+        error.value = null;
+        try {
+            const response = await axios.post('/auth/register', { name, email, password });
+            const { access_token, user: userData } = response.data;
+
+            token.value = access_token;
+            user.value = userData;
+
+            localStorage.setItem('token', access_token);
+            localStorage.setItem('user', JSON.stringify(userData));
+
+            updateAbility(userData);
+
+            await router.push('/users');
+        } catch (err: any) {
+            error.value = err.response?.data?.message || 'Registration failed';
+            console.error(err);
+        } finally {
+            loading.value = false;
+        }
+    }
+
+    function logout() {
+        token.value = null;
+        user.value = null;
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+
+        // Reset users store state
+        const usersStore = useUsersStore();
+        usersStore.users = [];
+        usersStore.error = null;
+
+        updateAbility(null);
+
+        router.push('/login');
+    }
+
+    return {
+        user,
+        token,
+        error,
+        loading,
+        isAuthenticated,
+        isAdmin,
+        login,
+        register,
+        logout
+    };
+});

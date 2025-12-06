@@ -14,6 +14,11 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { UsersService } from './users.service.js';
 import { CreateUserDto } from './dto/create-user.dto.js';
 import { UpdateUserDto } from './dto/update-user.dto.js';
+import { UseGuards } from '@nestjs/common';
+import { JwtAuthGuard } from '../auth/jwt-auth.guard.js';
+import { PoliciesGuard } from '../casl/policies.guard.js';
+import { CheckPolicies } from '../casl/policy.decorator.js';
+import { Action } from '../casl/casl-ability.factory.js';
 let UsersController = class UsersController {
     usersService;
     constructor(usersService) {
@@ -37,6 +42,8 @@ let UsersController = class UsersController {
 };
 __decorate([
     Post(),
+    UseGuards(JwtAuthGuard, PoliciesGuard),
+    CheckPolicies((ability) => ability.can(Action.Create, 'User')),
     __param(0, Body()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [CreateUserDto]),
@@ -44,12 +51,16 @@ __decorate([
 ], UsersController.prototype, "create", null);
 __decorate([
     Get(),
+    UseGuards(JwtAuthGuard, PoliciesGuard),
+    CheckPolicies((ability) => ability.can(Action.Read, 'User')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", []),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "findAll", null);
 __decorate([
     Get(':id'),
+    UseGuards(JwtAuthGuard, PoliciesGuard),
+    CheckPolicies((ability) => ability.can(Action.Read, 'User')),
     __param(0, Param('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
@@ -57,6 +68,8 @@ __decorate([
 ], UsersController.prototype, "findOne", null);
 __decorate([
     Patch(':id'),
+    UseGuards(JwtAuthGuard, PoliciesGuard),
+    CheckPolicies((ability) => ability.can(Action.Update, 'User')),
     __param(0, Param('id')),
     __param(1, Body()),
     __metadata("design:type", Function),
@@ -65,6 +78,8 @@ __decorate([
 ], UsersController.prototype, "update", null);
 __decorate([
     Delete(':id'),
+    UseGuards(JwtAuthGuard, PoliciesGuard),
+    CheckPolicies((ability) => ability.can(Action.Delete, 'User')),
     __param(0, Param('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),

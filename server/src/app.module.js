@@ -37,6 +37,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UsersModule } from './users/users.module';
 import { PrismaModule } from './prisma/prisma.module';
+import { AuthModule } from './auth/auth.module';
 let AppModule = (() => {
     let _classDecorators = [Module({
             imports: [PrismaModule, UsersModule],

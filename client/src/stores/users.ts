@@ -1,10 +1,12 @@
 import { defineStore } from 'pinia'
-import axios from 'axios'
+import axios from '@/plugins/axios'
+import { isAxiosError } from 'axios'
 
 export interface User {
     id: number
     email: string
     name: string | null
+    role: string
     status: string
     createdAt: string
     updatedAt: string
@@ -30,8 +32,8 @@ export const useUsersStore = defineStore('users', {
             try {
                 const response = await axios.get<User[]>('http://localhost:3000/users')
                 this.users = response.data
-            } catch (err: unknown) {
-                if (axios.isAxiosError(err)) {
+            } catch (err: any) {
+                if (isAxiosError(err)) {
                     this.error = err.response?.data?.message || err.message
                 } else if (err instanceof Error) {
                     this.error = err.message
@@ -49,8 +51,8 @@ export const useUsersStore = defineStore('users', {
             try {
                 const response = await axios.post<User>('http://localhost:3000/users', user)
                 this.users.push(response.data)
-            } catch (err: unknown) {
-                if (axios.isAxiosError(err)) {
+            } catch (err: any) {
+                if (isAxiosError(err)) {
                     this.error = err.response?.data?.message || err.message
                 } else if (err instanceof Error) {
                     this.error = err.message
@@ -72,8 +74,8 @@ export const useUsersStore = defineStore('users', {
                 if (index !== -1) {
                     this.users[index] = response.data
                 }
-            } catch (err: unknown) {
-                if (axios.isAxiosError(err)) {
+            } catch (err: any) {
+                if (isAxiosError(err)) {
                     this.error = err.response?.data?.message || err.message
                 } else if (err instanceof Error) {
                     this.error = err.message
@@ -92,8 +94,8 @@ export const useUsersStore = defineStore('users', {
             try {
                 await axios.delete(`http://localhost:3000/users/${id}`)
                 this.users = this.users.filter(u => u.id !== id)
-            } catch (err: unknown) {
-                if (axios.isAxiosError(err)) {
+            } catch (err: any) {
+                if (isAxiosError(err)) {
                     this.error = err.response?.data?.message || err.message
                 } else if (err instanceof Error) {
                     this.error = err.message

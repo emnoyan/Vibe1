@@ -45,7 +45,16 @@ let UsersService = class UsersService {
         }
         return null;
     }
+    async findOneByEmail(email) {
+        return this.prisma.user.findUnique({ where: { email } });
+    }
     async update(id, updateUserDto) {
+        if (updateUserDto.password === '' || updateUserDto.password === undefined || updateUserDto.password === null) {
+            delete updateUserDto.password;
+        }
+        if (updateUserDto.password) {
+            updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
+        }
         try {
             return await this.prisma.user.update({
                 where: { id },

@@ -1,7 +1,7 @@
 <script setup lang="ts">
-import UsersView from './views/UsersView.vue'
+import { RouterView } from 'vue-router'
 </script>
 
 <template>
-  <UsersView />
+  <RouterView />
 </template>
