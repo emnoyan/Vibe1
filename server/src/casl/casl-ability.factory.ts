@@ -1,6 +1,6 @@
-import { AbilityBuilder, PureAbility, AbilityClass, ExtractSubjectType, InferSubjects } from '@casl/ability';
+import { AbilityBuilder, PureAbility, AbilityClass, ExtractSubjectType, InferSubjects, MongoAbility, createMongoAbility } from '@casl/ability';
 import { Injectable } from '@nestjs/common';
-import { User, Role } from '@prisma/client';
+import { User, Post, Category, Role } from '../../generated/prisma/client';
 
 export enum Action {
     Manage = 'manage',
@@ -10,24 +10,41 @@ export enum Action {
     Delete = 'delete',
 }
 
-type Subjects = 'User' | 'all';
+type Subjects = 'User' | 'Post' | 'Category' | 'all' | User | Post | Category;
 
-export type AppAbility = PureAbility<[Action, Subjects]>;
+export type AppAbility = MongoAbility<[Action, Subjects]>;
 
 @Injectable()
 export class CaslAbilityFactory {
-    createForUser(user: { id: number; role: Role }) {
-        const { can, cannot, build } = new AbilityBuilder<AppAbility>(PureAbility as AbilityClass<AppAbility>);
+    createForUser(user: { id: number; role: Role; managedCategoryIds?: number[] }) {
+        const { can, cannot, build } = new AbilityBuilder<AppAbility>(createMongoAbility);
 
+        // Base permissions
+        can(Action.Read, 'Post');
+        can(Action.Read, 'Category');
+        can(Action.Create, 'Post');
+
+        // Admin manages all
         if (user.role === Role.ADMIN) {
-            can(Action.Manage, 'all'); // read-write access to everything
+            can(Action.Manage, 'all');
         } else {
-            can(Action.Read, 'User'); // read-only access to User
+            // User manages own content
+            can(Action.Manage, 'Post', { authorId: user.id });
+
+            // Mod manages assigned categories - Attribute Based
+            if (user.role === Role.MOD && user.managedCategoryIds && user.managedCategoryIds.length > 0) {
+                can(Action.Manage, 'Post', { categoryId: { $in: user.managedCategoryIds } });
+            }
         }
 
         return build({
-            // Read https://casl.js.org/v5/en/guide/subject-type-detection#use-classes-as-subject-types
-            detectSubjectType: (item) => 'User',
+            detectSubjectType: (item) => {
+                if (typeof item === 'string') return item as any;
+                if ('title' in item) return 'Post';
+                if ('slug' in item) return 'Category';
+                if ('email' in item) return 'User';
+                return 'all';
+            },
         });
     }
 }

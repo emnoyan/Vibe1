@@ -1,7 +1,7 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { INestApplication } from '@nestjs/common';
 import request from 'supertest';
-import { AppModule } from './../src/app.module.js';
+import { AppModule } from './../src/app.module';
 
 describe('UsersController (e2e)', () => {
     let app: INestApplication;
@@ -63,15 +63,15 @@ describe('UsersController (e2e)', () => {
         const loginRes = await request(app.getHttpServer())
             .post('/auth/login')
             .send({ email, password: 'password' })
-            .expect(201);
+            .expect(200);
 
         userToken = loginRes.body.access_token;
 
-        // 1. Can Read All
+        // 1. Cannot Read All (Restricted)
         await request(app.getHttpServer())
             .get('/users')
             .set('Authorization', `Bearer ${userToken}`)
-            .expect(200);
+            .expect(403);
 
         // 2. Cannot Create via /users (Protected)
         await request(app.getHttpServer())
@@ -86,6 +86,13 @@ describe('UsersController (e2e)', () => {
         await request(app.getHttpServer())
             .delete(`/users/${randomId}`)
             .set('Authorization', `Bearer ${userToken}`)
+            .expect(403);
+
+        // 4. Cannot Bulk Delete (Protected)
+        await request(app.getHttpServer())
+            .post('/users/bulk-delete')
+            .set('Authorization', `Bearer ${userToken}`)
+            .send({ ids: [1, 2, 3] })
             .expect(403);
     });
 });

@@ -1,9 +1,10 @@
 <script setup lang="ts">
-import { reactive, watch, computed } from 'vue';
+import { reactive, watch, computed, ref } from 'vue';
 
 const props = defineProps<{
   isOpen: boolean;
   initialData?: any;
+  categories?: any[];
   error?: string | string[] | null;
 }>();
 
@@ -21,6 +22,8 @@ const form = reactive({
   status: 'ACTIVE',
 });
 
+const managedCategoryIds = ref<number[]>([]);
+
 const errors = reactive({
   name: '',
   email: '',
@@ -34,7 +37,6 @@ watch(() => form.password, (newVal) => {
   } else if (newVal && newVal.length < 6) {
     errors.password = 'Password must be at least 6 characters';
   } else {
-    // Only clear if it was a length error, don't clear "Required" error if we haven't touched it (but here we are touching it)
     if (errors.password === 'Password must be at least 6 characters') {
         errors.password = '';
     }
@@ -57,9 +59,6 @@ const globalError = computed(() => {
   if (serverEmailError.value) {
     return null;
   }
-  if (serverEmailError.value) {
-    return null;
-  }
   return Array.isArray(props.error) ? props.error.join(', ') : props.error;
 });
 
@@ -74,12 +73,14 @@ watch(() => props.isOpen, (newVal) => {
       form.password = ''; // Don't fill password on edit
       form.role = props.initialData.role || 'USER';
       form.status = props.initialData.status || 'ACTIVE';
+      managedCategoryIds.value = props.initialData.managedCategories?.map((c: any) => c.id) || [];
     } else {
       form.name = '';
       form.email = '';
       form.password = '';
       form.role = 'USER';
       form.status = 'ACTIVE';
+      managedCategoryIds.value = [];
     }
   }
   // Clear errors when modal opens/closes or data changes
@@ -127,12 +128,25 @@ const handleSave = () => {
   if (isEditMode.value && !payload.password) {
     delete payload.password;
   }
+  
+  if (form.role === 'MOD') {
+      payload.managedCategoryIds = managedCategoryIds.value;
+  }
 
   if (isEditMode.value) {
     emit('update', payload);
   } else {
     emit('save', payload);
   }
+};
+
+const toggleCategory = (id: number) => {
+    const index = managedCategoryIds.value.indexOf(id);
+    if (index === -1) {
+        managedCategoryIds.value.push(id);
+    } else {
+        managedCategoryIds.value.splice(index, 1);
+    }
 };
 </script>
 
@@ -141,7 +155,7 @@ const handleSave = () => {
     <div class="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 
     <div class="fixed inset-0 z-10 w-screen overflow-y-auto">
-      <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0">
+      <div class="flex min-h-full items-end justify-center p-4 text-center sm:items-center sm:p-0" @click.self="$emit('close')">
         <div class="relative transform overflow-hidden rounded-lg bg-white text-left shadow-xl transition-all sm:my-8 sm:w-full sm:max-w-lg">
           <div class="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
             <div class="sm:flex sm:items-start">
@@ -183,9 +197,29 @@ const handleSave = () => {
                     <label for="role" class="block text-sm font-medium leading-6 text-gray-900">Role</label>
                     <select v-model="form.role" id="role" name="role" class="mt-1 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">
                       <option value="USER">User</option>
+                      <option value="MOD">Moderator</option>
                       <option value="ADMIN">Admin</option>
                     </select>
                   </div>
+                  
+                  <div v-if="form.role === 'MOD' && categories">
+                    <label class="block text-sm font-medium leading-6 text-gray-900 mb-2">Managed Categories</label>
+                    <div class="space-y-2 max-h-40 overflow-y-auto border rounded-md p-2">
+                        <div v-for="category in categories" :key="category.id" class="flex items-center">
+                            <input 
+                                :id="'cat-' + category.id" 
+                                type="checkbox" 
+                                :checked="managedCategoryIds.includes(category.id)"
+                                @change="toggleCategory(category.id)"
+                                class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600"
+                            >
+                            <label :for="'cat-' + category.id" class="ml-2 block text-sm text-gray-900">
+                                {{ category.name }}
+                            </label>
+                        </div>
+                    </div>
+                  </div>
+
                   <div>
                     <label for="status" class="block text-sm font-medium leading-6 text-gray-900">Status</label>
                     <select v-model="form.status" id="status" name="status" class="mt-1 block w-full rounded-md border-0 py-1.5 pl-3 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-indigo-600 sm:text-sm sm:leading-6">

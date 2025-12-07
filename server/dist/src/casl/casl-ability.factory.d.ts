@@ -1,5 +1,5 @@
-import { PureAbility } from '@casl/ability';
-import { Role } from '@prisma/client';
+import { MongoAbility } from '@casl/ability';
+import { User, Post, Category, Role } from '../../generated/prisma/client';
 export declare enum Action {
     Manage = "manage",
     Create = "create",
@@ -7,12 +7,13 @@ export declare enum Action {
     Update = "update",
     Delete = "delete"
 }
-type Subjects = 'User' | 'all';
-export type AppAbility = PureAbility<[Action, Subjects]>;
+type Subjects = 'User' | 'Post' | 'Category' | 'all' | User | Post | Category;
+export type AppAbility = MongoAbility<[Action, Subjects]>;
 export declare class CaslAbilityFactory {
     createForUser(user: {
         id: number;
         role: Role;
+        managedCategoryIds?: number[];
     }): AppAbility;
 }
 export {};

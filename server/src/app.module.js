@@ -33,14 +33,16 @@ var __runInitializers = (this && this.__runInitializers) || function (thisArg, i
     return useValue ? value : void 0;
 };
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
-import { PrismaModule } from './prisma/prisma.module';
-import { AuthModule } from './auth/auth.module';
+import { AppController } from './app.controller.js';
+import { AppService } from './app.service.js';
+import { UsersModule } from './users/users.module.js';
+import { PrismaModule } from './prisma/prisma.module.js';
+import { AuthModule } from './auth/auth.module.js';
+import { PostsModule } from './posts/posts.module.js';
+import { CategoriesModule } from './categories/categories.module.js';
 let AppModule = (() => {
     let _classDecorators = [Module({
-            imports: [PrismaModule, UsersModule],
+            imports: [PrismaModule, UsersModule, AuthModule, PostsModule, CategoriesModule],
             controllers: [AppController],
             providers: [AppService],
         })];

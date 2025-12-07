@@ -7,23 +7,48 @@ export declare class AuthService {
     constructor(usersService: UsersService, jwtService: JwtService);
     validateUser(email: string, pass: string): Promise<any>;
     login(user: any): Promise<{
-        access_token: string;
         user: {
             id: any;
             email: any;
             name: any;
             role: any;
             status: any;
+            managedCategories: any;
         };
+        access_token: string;
+        refresh_token: string;
     }>;
     register(createUserDto: CreateUserDto): Promise<{
-        access_token: string;
         user: {
             id: any;
             email: any;
             name: any;
             role: any;
             status: any;
+            managedCategories: any;
         };
+        access_token: string;
+        refresh_token: string;
+    }>;
+    logout(userId: number): Promise<{
+        email: string;
+        password: string;
+        name: string | null;
+        role: import("../../generated/prisma/enums.js").Role;
+        status: import("../../generated/prisma/enums.js").UserStatus;
+        searchText: string;
+        hashedRefreshToken: string | null;
+        createdAt: Date;
+        updatedAt: Date;
+        id: number;
+    }>;
+    refreshTokens(userId: number, rt: string): Promise<{
+        access_token: string;
+        refresh_token: string;
+    }>;
+    updateRefreshToken(userId: number, refreshToken: string): Promise<void>;
+    getTokens(userId: number, email: string, role: string, managedCategories?: any[]): Promise<{
+        access_token: string;
+        refresh_token: string;
     }>;
 }

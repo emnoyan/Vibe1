@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,22 +8,32 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { PartialType } from '@nestjs/mapped-types';
-import { CreateUserDto } from './create-user.dto.js';
-import { IsEnum, IsOptional } from 'class-validator';
-import { Role, UserStatus } from '@prisma/client';
-export class UpdateUserDto extends PartialType(CreateUserDto) {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UpdateUserDto = void 0;
+const mapped_types_1 = require("@nestjs/mapped-types");
+const create_user_dto_js_1 = require("./create-user.dto.js");
+const class_validator_1 = require("class-validator");
+const client_1 = require("../../../generated/prisma/client");
+class UpdateUserDto extends (0, mapped_types_1.PartialType)(create_user_dto_js_1.CreateUserDto) {
     role;
     status;
+    managedCategoryIds;
 }
+exports.UpdateUserDto = UpdateUserDto;
 __decorate([
-    IsOptional(),
-    IsEnum(Role),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(client_1.Role),
     __metadata("design:type", String)
 ], UpdateUserDto.prototype, "role", void 0);
 __decorate([
-    IsOptional(),
-    IsEnum(UserStatus),
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsEnum)(client_1.UserStatus),
     __metadata("design:type", String)
 ], UpdateUserDto.prototype, "status", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsArray)(),
+    (0, class_validator_1.IsNumber)({}, { each: true }),
+    __metadata("design:type", Array)
+], UpdateUserDto.prototype, "managedCategoryIds", void 0);
 //# sourceMappingURL=update-user.dto.js.map

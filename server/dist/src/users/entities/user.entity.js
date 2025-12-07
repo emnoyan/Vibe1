@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -7,22 +8,36 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
-import { Exclude } from 'class-transformer';
-export class UserEntity {
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UserEntity = void 0;
+const class_transformer_1 = require("class-transformer");
+class UserEntity {
     id;
     email;
     password;
+    hashedRefreshToken;
+    searchText;
     name;
     role;
     status;
+    managedCategories;
     createdAt;
     updatedAt;
     constructor(partial) {
         Object.assign(this, partial);
     }
 }
+exports.UserEntity = UserEntity;
 __decorate([
-    Exclude(),
+    (0, class_transformer_1.Exclude)(),
     __metadata("design:type", String)
 ], UserEntity.prototype, "password", void 0);
+__decorate([
+    (0, class_transformer_1.Exclude)(),
+    __metadata("design:type", Object)
+], UserEntity.prototype, "hashedRefreshToken", void 0);
+__decorate([
+    (0, class_transformer_1.Exclude)(),
+    __metadata("design:type", String)
+], UserEntity.prototype, "searchText", void 0);
 //# sourceMappingURL=user.entity.js.map

@@ -49,6 +49,9 @@ let PrismaService = (() => {
             if (_metadata) Object.defineProperty(_classThis, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
             __runInitializers(_classThis, _classExtraInitializers);
         }
+        constructor() {
+            super({});
+        }
         async onModuleInit() {
             await this.$connect();
         }

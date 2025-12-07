@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,43 +11,77 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { Controller, Post, Body, UnauthorizedException, HttpCode, HttpStatus } from '@nestjs/common';
-import { AuthService } from './auth.service.js';
-import { CreateUserDto } from '../users/dto/create-user.dto.js';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.AuthController = void 0;
+const common_1 = require("@nestjs/common");
+const auth_service_js_1 = require("./auth.service.js");
+const create_user_dto_js_1 = require("../users/dto/create-user.dto.js");
+const jwt_auth_guard_js_1 = require("./jwt-auth.guard.js");
+const jwt_1 = require("@nestjs/jwt");
 let AuthController = class AuthController {
     authService;
-    constructor(authService) {
+    jwtService;
+    constructor(authService, jwtService) {
         this.authService = authService;
+        this.jwtService = jwtService;
     }
     async login(signInDto) {
         const user = await this.authService.validateUser(signInDto.email, signInDto.password);
         if (!user) {
-            throw new UnauthorizedException('Invalid credentials');
+            throw new common_1.UnauthorizedException('Invalid credentials');
         }
         return this.authService.login(user);
     }
     async register(createUserDto) {
         return this.authService.register(createUserDto);
     }
+    async logout(req) {
+        return this.authService.logout(req.user.userId || req.user.id || req.user.sub);
+    }
+    async refresh(body) {
+        try {
+            const payload = await this.jwtService.verifyAsync(body.refresh_token);
+            return this.authService.refreshTokens(payload.sub, body.refresh_token);
+        }
+        catch (e) {
+            throw new common_1.UnauthorizedException('Invalid refresh token');
+        }
+    }
 };
+exports.AuthController = AuthController;
 __decorate([
-    HttpCode(HttpStatus.OK),
-    Post('login'),
-    __param(0, Body()),
+    (0, common_1.HttpCode)(common_1.HttpStatus.OK),
+    (0, common_1.Post)('login'),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [Object]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "login", null);
 __decorate([
-    Post('register'),
-    __param(0, Body()),
+    (0, common_1.Post)('register'),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [CreateUserDto]),
+    __metadata("design:paramtypes", [create_user_dto_js_1.CreateUserDto]),
     __metadata("design:returntype", Promise)
 ], AuthController.prototype, "register", null);
-AuthController = __decorate([
-    Controller('auth'),
-    __metadata("design:paramtypes", [AuthService])
+__decorate([
+    (0, common_1.UseGuards)(jwt_auth_guard_js_1.JwtAuthGuard),
+    (0, common_1.Post)('logout'),
+    __param(0, (0, common_1.Req)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "logout", null);
+__decorate([
+    (0, common_1.Post)('refresh'),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", Promise)
+], AuthController.prototype, "refresh", null);
+exports.AuthController = AuthController = __decorate([
+    (0, common_1.Controller)('auth'),
+    __metadata("design:paramtypes", [auth_service_js_1.AuthService,
+        jwt_1.JwtService])
 ], AuthController);
-export { AuthController };
 //# sourceMappingURL=auth.controller.js.map

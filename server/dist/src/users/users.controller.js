@@ -1,3 +1,4 @@
+"use strict";
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -10,15 +11,17 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/common';
-import { UsersService } from './users.service.js';
-import { CreateUserDto } from './dto/create-user.dto.js';
-import { UpdateUserDto } from './dto/update-user.dto.js';
-import { UseGuards } from '@nestjs/common';
-import { JwtAuthGuard } from '../auth/jwt-auth.guard.js';
-import { PoliciesGuard } from '../casl/policies.guard.js';
-import { CheckPolicies } from '../casl/policy.decorator.js';
-import { Action } from '../casl/casl-ability.factory.js';
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.UsersController = void 0;
+const common_1 = require("@nestjs/common");
+const users_service_js_1 = require("./users.service.js");
+const create_user_dto_js_1 = require("./dto/create-user.dto.js");
+const update_user_dto_js_1 = require("./dto/update-user.dto.js");
+const common_2 = require("@nestjs/common");
+const jwt_auth_guard_js_1 = require("../auth/jwt-auth.guard.js");
+const policies_guard_js_1 = require("../casl/policies.guard.js");
+const check_policies_decorator_js_1 = require("../casl/check-policies.decorator.js");
+const casl_ability_factory_js_1 = require("../casl/casl-ability.factory.js");
 let UsersController = class UsersController {
     usersService;
     constructor(usersService) {
@@ -27,8 +30,11 @@ let UsersController = class UsersController {
     create(createUserDto) {
         return this.usersService.create(createUserDto);
     }
-    findAll() {
-        return this.usersService.findAll();
+    findAll(q, role, status, sortBy, sortOrder) {
+        return this.usersService.findAll({ q, role, status, sortBy, sortOrder });
+    }
+    getStats() {
+        return this.usersService.getStats();
     }
     findOne(id) {
         return this.usersService.findOne(+id);
@@ -39,55 +45,80 @@ let UsersController = class UsersController {
     remove(id) {
         return this.usersService.remove(+id);
     }
+    removeMany(body) {
+        return this.usersService.removeMany(body.ids);
+    }
 };
+exports.UsersController = UsersController;
 __decorate([
-    Post(),
-    UseGuards(JwtAuthGuard, PoliciesGuard),
-    CheckPolicies((ability) => ability.can(Action.Create, 'User')),
-    __param(0, Body()),
+    (0, common_1.Post)(),
+    (0, common_2.UseGuards)(jwt_auth_guard_js_1.JwtAuthGuard, policies_guard_js_1.PoliciesGuard),
+    (0, check_policies_decorator_js_1.CheckPolicies)((ability) => ability.can(casl_ability_factory_js_1.Action.Create, 'User')),
+    __param(0, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [CreateUserDto]),
+    __metadata("design:paramtypes", [create_user_dto_js_1.CreateUserDto]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "create", null);
 __decorate([
-    Get(),
-    UseGuards(JwtAuthGuard, PoliciesGuard),
-    CheckPolicies((ability) => ability.can(Action.Read, 'User')),
+    (0, common_1.Get)(),
+    (0, common_2.UseGuards)(jwt_auth_guard_js_1.JwtAuthGuard, policies_guard_js_1.PoliciesGuard),
+    (0, check_policies_decorator_js_1.CheckPolicies)((ability) => ability.can(casl_ability_factory_js_1.Action.Read, 'User')),
+    __param(0, (0, common_1.Query)('q')),
+    __param(1, (0, common_1.Query)('role')),
+    __param(2, (0, common_1.Query)('status')),
+    __param(3, (0, common_1.Query)('sortBy')),
+    __param(4, (0, common_1.Query)('sortOrder')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [String, String, String, String, String]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "findAll", null);
 __decorate([
-    Get(':id'),
-    UseGuards(JwtAuthGuard, PoliciesGuard),
-    CheckPolicies((ability) => ability.can(Action.Read, 'User')),
-    __param(0, Param('id')),
+    (0, common_1.Get)('stats'),
+    (0, common_2.UseGuards)(jwt_auth_guard_js_1.JwtAuthGuard, policies_guard_js_1.PoliciesGuard),
+    (0, check_policies_decorator_js_1.CheckPolicies)((ability) => ability.can(casl_ability_factory_js_1.Action.Read, 'User')),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", []),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "getStats", null);
+__decorate([
+    (0, common_1.Get)(':id'),
+    (0, common_2.UseGuards)(jwt_auth_guard_js_1.JwtAuthGuard, policies_guard_js_1.PoliciesGuard),
+    (0, check_policies_decorator_js_1.CheckPolicies)((ability) => ability.can(casl_ability_factory_js_1.Action.Read, 'User')),
+    __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "findOne", null);
 __decorate([
-    Patch(':id'),
-    UseGuards(JwtAuthGuard, PoliciesGuard),
-    CheckPolicies((ability) => ability.can(Action.Update, 'User')),
-    __param(0, Param('id')),
-    __param(1, Body()),
+    (0, common_1.Patch)(':id'),
+    (0, common_2.UseGuards)(jwt_auth_guard_js_1.JwtAuthGuard, policies_guard_js_1.PoliciesGuard),
+    (0, check_policies_decorator_js_1.CheckPolicies)((ability) => ability.can(casl_ability_factory_js_1.Action.Update, 'User')),
+    __param(0, (0, common_1.Param)('id')),
+    __param(1, (0, common_1.Body)()),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", [String, UpdateUserDto]),
+    __metadata("design:paramtypes", [String, update_user_dto_js_1.UpdateUserDto]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "update", null);
 __decorate([
-    Delete(':id'),
-    UseGuards(JwtAuthGuard, PoliciesGuard),
-    CheckPolicies((ability) => ability.can(Action.Delete, 'User')),
-    __param(0, Param('id')),
+    (0, common_1.Delete)(':id'),
+    (0, common_2.UseGuards)(jwt_auth_guard_js_1.JwtAuthGuard, policies_guard_js_1.PoliciesGuard),
+    (0, check_policies_decorator_js_1.CheckPolicies)((ability) => ability.can(casl_ability_factory_js_1.Action.Delete, 'User')),
+    __param(0, (0, common_1.Param)('id')),
     __metadata("design:type", Function),
     __metadata("design:paramtypes", [String]),
     __metadata("design:returntype", void 0)
 ], UsersController.prototype, "remove", null);
-UsersController = __decorate([
-    Controller('users'),
-    __metadata("design:paramtypes", [UsersService])
+__decorate([
+    (0, common_1.Post)('bulk-delete'),
+    (0, common_2.UseGuards)(jwt_auth_guard_js_1.JwtAuthGuard, policies_guard_js_1.PoliciesGuard),
+    (0, check_policies_decorator_js_1.CheckPolicies)((ability) => ability.can(casl_ability_factory_js_1.Action.Delete, 'User')),
+    __param(0, (0, common_1.Body)()),
+    __metadata("design:type", Function),
+    __metadata("design:paramtypes", [Object]),
+    __metadata("design:returntype", void 0)
+], UsersController.prototype, "removeMany", null);
+exports.UsersController = UsersController = __decorate([
+    (0, common_1.Controller)('users'),
+    __metadata("design:paramtypes", [users_service_js_1.UsersService])
 ], UsersController);
-export { UsersController };
 //# sourceMappingURL=users.controller.js.map

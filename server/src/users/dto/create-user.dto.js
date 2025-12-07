@@ -32,7 +32,8 @@ var __runInitializers = (this && this.__runInitializers) || function (thisArg, i
     }
     return useValue ? value : void 0;
 };
-import { IsEmail, IsNotEmpty, IsString, MinLength } from 'class-validator';
+import { IsEmail, IsNotEmpty, IsString, MinLength, IsEnum, IsOptional } from 'class-validator';
+import { Role, UserStatus } from '@prisma/client';
 let CreateUserDto = (() => {
     let _email_decorators;
     let _email_initializers = [];
@@ -43,22 +44,34 @@ let CreateUserDto = (() => {
     let _name_decorators;
     let _name_initializers = [];
     let _name_extraInitializers = [];
+    let _role_decorators;
+    let _role_initializers = [];
+    let _role_extraInitializers = [];
+    let _status_decorators;
+    let _status_initializers = [];
+    let _status_extraInitializers = [];
     return class CreateUserDto {
         static {
             const _metadata = typeof Symbol === "function" && Symbol.metadata ? Object.create(null) : void 0;
             _email_decorators = [IsEmail(), IsNotEmpty()];
             _password_decorators = [IsString(), IsNotEmpty(), MinLength(6)];
             _name_decorators = [IsString(), IsNotEmpty()];
+            _role_decorators = [IsOptional(), IsEnum(Role)];
+            _status_decorators = [IsOptional(), IsEnum(UserStatus)];
             __esDecorate(null, null, _email_decorators, { kind: "field", name: "email", static: false, private: false, access: { has: obj => "email" in obj, get: obj => obj.email, set: (obj, value) => { obj.email = value; } }, metadata: _metadata }, _email_initializers, _email_extraInitializers);
             __esDecorate(null, null, _password_decorators, { kind: "field", name: "password", static: false, private: false, access: { has: obj => "password" in obj, get: obj => obj.password, set: (obj, value) => { obj.password = value; } }, metadata: _metadata }, _password_initializers, _password_extraInitializers);
             __esDecorate(null, null, _name_decorators, { kind: "field", name: "name", static: false, private: false, access: { has: obj => "name" in obj, get: obj => obj.name, set: (obj, value) => { obj.name = value; } }, metadata: _metadata }, _name_initializers, _name_extraInitializers);
+            __esDecorate(null, null, _role_decorators, { kind: "field", name: "role", static: false, private: false, access: { has: obj => "role" in obj, get: obj => obj.role, set: (obj, value) => { obj.role = value; } }, metadata: _metadata }, _role_initializers, _role_extraInitializers);
+            __esDecorate(null, null, _status_decorators, { kind: "field", name: "status", static: false, private: false, access: { has: obj => "status" in obj, get: obj => obj.status, set: (obj, value) => { obj.status = value; } }, metadata: _metadata }, _status_initializers, _status_extraInitializers);
             if (_metadata) Object.defineProperty(this, Symbol.metadata, { enumerable: true, configurable: true, writable: true, value: _metadata });
         }
         email = __runInitializers(this, _email_initializers, void 0);
         password = (__runInitializers(this, _email_extraInitializers), __runInitializers(this, _password_initializers, void 0));
         name = (__runInitializers(this, _password_extraInitializers), __runInitializers(this, _name_initializers, void 0));
+        role = (__runInitializers(this, _name_extraInitializers), __runInitializers(this, _role_initializers, void 0));
+        status = (__runInitializers(this, _role_extraInitializers), __runInitializers(this, _status_initializers, void 0));
         constructor() {
-            __runInitializers(this, _name_extraInitializers);
+            __runInitializers(this, _status_extraInitializers);
         }
     };
 })();

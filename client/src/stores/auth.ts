@@ -17,6 +17,7 @@ interface User {
 export const useAuthStore = defineStore('auth', () => {
     const user = ref<User | null>(JSON.parse(localStorage.getItem('user') || 'null'));
     const token = ref<string | null>(localStorage.getItem('token') || null);
+    const refreshToken = ref<string | null>(localStorage.getItem('refreshToken') || null);
     const error = ref<string | null>(null);
     const loading = ref(false);
 
@@ -44,12 +45,14 @@ export const useAuthStore = defineStore('auth', () => {
         error.value = null;
         try {
             const response = await axios.post('/auth/login', { email, password });
-            const { access_token, user: userData } = response.data;
+            const { access_token, refresh_token, user: userData } = response.data;
 
             token.value = access_token;
+            refreshToken.value = refresh_token;
             user.value = userData;
 
             localStorage.setItem('token', access_token);
+            localStorage.setItem('refreshToken', refresh_token);
             localStorage.setItem('user', JSON.stringify(userData));
 
             updateAbility(userData);
@@ -68,12 +71,14 @@ export const useAuthStore = defineStore('auth', () => {
         error.value = null;
         try {
             const response = await axios.post('/auth/register', { name, email, password });
-            const { access_token, user: userData } = response.data;
+            const { access_token, refresh_token, user: userData } = response.data;
 
             token.value = access_token;
+            refreshToken.value = refresh_token;
             user.value = userData;
 
             localStorage.setItem('token', access_token);
+            localStorage.setItem('refreshToken', refresh_token);
             localStorage.setItem('user', JSON.stringify(userData));
 
             updateAbility(userData);
@@ -87,10 +92,18 @@ export const useAuthStore = defineStore('auth', () => {
         }
     }
 
-    function logout() {
+    async function logout() {
+        try {
+            await axios.post('/auth/logout');
+        } catch (e) {
+            console.error('Logout failed on server', e);
+        }
+
         token.value = null;
+        refreshToken.value = null;
         user.value = null;
         localStorage.removeItem('token');
+        localStorage.removeItem('refreshToken');
         localStorage.removeItem('user');
 
         // Reset users store state
@@ -106,6 +119,7 @@ export const useAuthStore = defineStore('auth', () => {
     return {
         user,
         token,
+        refreshToken,
         error,
         loading,
         isAuthenticated,

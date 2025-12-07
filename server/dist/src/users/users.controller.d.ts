@@ -5,35 +5,65 @@ export declare class UsersController {
     private readonly usersService;
     constructor(usersService: UsersService);
     create(createUserDto: CreateUserDto): Promise<{
-        id: number;
+        managedCategories: {
+            name: string;
+            id: number;
+            slug: string;
+        }[];
+    } & {
         email: string;
         password: string;
         name: string | null;
-        role: import(".prisma/client").$Enums.Role;
-        status: import(".prisma/client").$Enums.UserStatus;
+        role: import("../../generated/prisma/enums.js").Role;
+        status: import("../../generated/prisma/enums.js").UserStatus;
+        searchText: string;
+        hashedRefreshToken: string | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
     }>;
-    findAll(): Promise<import("./entities/user.entity.js").UserEntity[]>;
+    findAll(q?: string, role?: 'ADMIN' | 'USER', status?: 'ACTIVE' | 'INACTIVE', sortBy?: string, sortOrder?: 'asc' | 'desc'): Promise<import("./entities/user.entity.js").UserEntity[]>;
+    getStats(): Promise<{
+        total: number;
+        active: number;
+        inactive: number;
+        admin: number;
+        user: number;
+    }>;
     findOne(id: string): Promise<import("./entities/user.entity.js").UserEntity | null>;
     update(id: string, updateUserDto: UpdateUserDto): Promise<{
-        id: number;
+        managedCategories: {
+            name: string;
+            id: number;
+            slug: string;
+        }[];
+    } & {
         email: string;
         password: string;
         name: string | null;
-        role: import(".prisma/client").$Enums.Role;
-        status: import(".prisma/client").$Enums.UserStatus;
+        role: import("../../generated/prisma/enums.js").Role;
+        status: import("../../generated/prisma/enums.js").UserStatus;
+        searchText: string;
+        hashedRefreshToken: string | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
     }>;
-    remove(id: string): import(".prisma/client").Prisma.Prisma__UserClient<{
-        id: number;
+    remove(id: string): import("../../generated/prisma/models.js").Prisma__UserClient<{
         email: string;
         password: string;
         name: string | null;
-        role: import(".prisma/client").$Enums.Role;
-        status: import(".prisma/client").$Enums.UserStatus;
+        role: import("../../generated/prisma/enums.js").Role;
+        status: import("../../generated/prisma/enums.js").UserStatus;
+        searchText: string;
+        hashedRefreshToken: string | null;
         createdAt: Date;
         updatedAt: Date;
-    }, never, import("@prisma/client/runtime/library").DefaultArgs>;
+        id: number;
+    }, never, import("@prisma/client/runtime/client.js").DefaultArgs, {
+        omit: import("../../generated/prisma/internal/prismaNamespace.js").GlobalOmitConfig | undefined;
+    }>;
+    removeMany(body: {
+        ids: number[];
+    }): import("../../generated/prisma/internal/prismaNamespace.js").PrismaPromise<import("../../generated/prisma/internal/prismaNamespace.js").BatchPayload>;
 }

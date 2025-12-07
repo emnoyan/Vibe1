@@ -33,12 +33,15 @@ var __runInitializers = (this && this.__runInitializers) || function (thisArg, i
     return useValue ? value : void 0;
 };
 import { Module } from '@nestjs/common';
-import { UsersService } from './users.service';
-import { UsersController } from './users.controller';
+import { UsersService } from './users.service.js';
+import { UsersController } from './users.controller.js';
+import { CaslModule } from '../casl/casl.module.js';
 let UsersModule = (() => {
     let _classDecorators = [Module({
+            imports: [CaslModule],
             controllers: [UsersController],
             providers: [UsersService],
+            exports: [UsersService],
         })];
     let _classDescriptor;
     let _classExtraInitializers = [];

@@ -32,8 +32,10 @@ var __runInitializers = (this && this.__runInitializers) || function (thisArg, i
     }
     return useValue ? value : void 0;
 };
-import { Injectable } from '@nestjs/common';
+import { Injectable, ConflictException } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
+import { UserEntity } from './entities/user.entity.js';
+import { Prisma } from '@prisma/client';
 let UsersService = (() => {
     let _classDecorators = [Injectable()];
     let _classDescriptor;
@@ -52,29 +54,168 @@ let UsersService = (() => {
         constructor(prisma) {
             this.prisma = prisma;
         }
+        removeAccents(str) {
+            return str
+                .normalize('NFD')
+                .replace(/[\u0300-\u036f]/g, '')
+                .replace(/đ/g, 'd')
+                .replace(/Đ/g, 'd')
+                .toLowerCase();
+        }
+        async onModuleInit() {
+            // Refresh searchText for all users to ensure new accent removal logic (e.g. Đ -> d) is applied
+            const users = await this.prisma.user.findMany({
+                select: { id: true, name: true, email: true, searchText: true },
+            });
+            for (const user of users) {
+                const newSearchText = this.removeAccents((user.name || '') + ' ' + user.email);
+                if (user.searchText !== newSearchText) {
+                    await this.prisma.user.update({
+                        where: { id: user.id },
+                        data: { searchText: newSearchText },
+                    });
+                }
+            }
+        }
         async create(createUserDto) {
             const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
-            return this.prisma.user.create({
-                data: {
-                    ...createUserDto,
-                    password: hashedPassword,
+            const searchText = this.removeAccents((createUserDto.name || '') + ' ' + createUserDto.email);
+            try {
+                return await this.prisma.user.create({
+                    data: {
+                        ...createUserDto,
+                        password: hashedPassword,
+                        searchText,
+                    },
+                    include: {
+                        managedCategories: true
+                    }
+                });
+            }
+            catch (error) {
+                if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+                    throw new ConflictException('Email already exists');
+                }
+                throw error;
+            }
+        }
+        async findAll(params) {
+            const { q, role, status, sortBy, sortOrder } = params || {};
+            // Normalize query
+            const normalizedQ = q ? this.removeAccents(q) : undefined;
+            const where = {
+                AND: [
+                    normalizedQ ? {
+                        searchText: { contains: normalizedQ, mode: 'insensitive' },
+                    } : {},
+                    role ? { role: role } : {},
+                    status ? { status: status } : {},
+                ],
+            };
+            const orderBy = sortBy ? {
+                [sortBy]: sortOrder || 'asc',
+            } : { id: 'asc' };
+            const users = await this.prisma.user.findMany({
+                where,
+                orderBy,
+                include: {
+                    managedCategories: true,
                 },
             });
+            return users.map((user) => new UserEntity(user));
         }
-        findAll() {
-            return this.prisma.user.findMany();
-        }
-        findOne(id) {
-            return this.prisma.user.findUnique({ where: { id } });
-        }
-        update(id, updateUserDto) {
-            return this.prisma.user.update({
+        async findOne(id) {
+            const user = await this.prisma.user.findUnique({
                 where: { id },
-                data: updateUserDto,
+                include: { managedCategories: true }
             });
+            if (user) {
+                return new UserEntity(user);
+            }
+            return null;
+        }
+        async findOneByEmail(email) {
+            return this.prisma.user.findUnique({
+                where: { email },
+                include: { managedCategories: true }
+            });
+        }
+        async update(id, updateUserDto) {
+            // If password is provided but empty, remove it to prevent overwriting with empty string
+            if (updateUserDto.password === '' || updateUserDto.password === undefined || updateUserDto.password === null) {
+                delete updateUserDto.password;
+            }
+            // If password is provided and not empty, hash it
+            if (updateUserDto.password) {
+                updateUserDto.password = await bcrypt.hash(updateUserDto.password, 10);
+            }
+            // Update searchText if name or email is changing, or both
+            // However, updateDto is partial. We need current data to reconstruct full searchText IF we want to keep it sync.
+            // Or we can just fetch current user first?
+            // Optimization: If name or email is provided, fetch current, merge, update searchText.
+            let searchText;
+            if (updateUserDto.name !== undefined || updateUserDto.email !== undefined) {
+                const currentUser = await this.prisma.user.findUnique({ where: { id } });
+                if (currentUser) {
+                    const newName = updateUserDto.name !== undefined ? updateUserDto.name : currentUser.name;
+                    const newEmail = updateUserDto.email !== undefined ? updateUserDto.email : currentUser.email;
+                    searchText = this.removeAccents((newName || '') + ' ' + newEmail);
+                }
+            }
+            const { managedCategoryIds, ...userData } = updateUserDto;
+            try {
+                return await this.prisma.user.update({
+                    where: { id },
+                    data: {
+                        ...userData,
+                        ...(searchText ? { searchText } : {}),
+                        ...(managedCategoryIds ? {
+                            managedCategories: {
+                                set: managedCategoryIds.map(id => ({ id }))
+                            }
+                        } : {}),
+                    },
+                    include: {
+                        managedCategories: true
+                    }
+                });
+            }
+            catch (error) {
+                if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
+                    throw new ConflictException('Email already exists');
+                }
+                throw error;
+            }
         }
         remove(id) {
             return this.prisma.user.delete({ where: { id } });
+        }
+        removeMany(ids) {
+            return this.prisma.user.deleteMany({
+                where: {
+                    id: { in: ids },
+                },
+            });
+        }
+        async getStats() {
+            const total = await this.prisma.user.count();
+            const active = await this.prisma.user.count({ where: { status: 'ACTIVE' } });
+            const inactive = await this.prisma.user.count({ where: { status: 'INACTIVE' } });
+            const admin = await this.prisma.user.count({ where: { role: 'ADMIN' } });
+            const user = await this.prisma.user.count({ where: { role: 'USER' } });
+            return {
+                total,
+                active,
+                inactive,
+                admin,
+                user,
+            };
+        }
+        async updateRefreshToken(id, hashedRefreshToken) {
+            return this.prisma.user.update({
+                where: { id },
+                data: { hashedRefreshToken },
+            });
         }
     };
     return UsersService = _classThis;
