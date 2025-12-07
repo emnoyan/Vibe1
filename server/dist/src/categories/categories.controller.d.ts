@@ -5,35 +5,35 @@ export declare class CategoriesController {
     private readonly categoriesService;
     constructor(categoriesService: CategoriesService);
     create(createCategoryDto: CreateCategoryDto): import("../../generated/prisma/models.js").Prisma__CategoryClient<{
-        id: number;
         name: string;
         slug: string;
+        id: number;
     }, never, import("@prisma/client/runtime/client.js").DefaultArgs, {
         omit: import("../../generated/prisma/internal/prismaNamespace.js").GlobalOmitConfig | undefined;
     }>;
-    findAll(): import("../../generated/prisma/internal/prismaNamespace.js").PrismaPromise<{
-        id: number;
+    findAll(q?: string, sortBy?: string, sortOrder?: 'asc' | 'desc'): import("../../generated/prisma/internal/prismaNamespace.js").PrismaPromise<{
         name: string;
         slug: string;
+        id: number;
     }[]>;
     findOne(id: string): import("../../generated/prisma/models.js").Prisma__CategoryClient<{
-        id: number;
         name: string;
         slug: string;
+        id: number;
     } | null, null, import("@prisma/client/runtime/client.js").DefaultArgs, {
         omit: import("../../generated/prisma/internal/prismaNamespace.js").GlobalOmitConfig | undefined;
     }>;
     update(id: string, updateCategoryDto: UpdateCategoryDto): import("../../generated/prisma/models.js").Prisma__CategoryClient<{
-        id: number;
         name: string;
         slug: string;
+        id: number;
     }, never, import("@prisma/client/runtime/client.js").DefaultArgs, {
         omit: import("../../generated/prisma/internal/prismaNamespace.js").GlobalOmitConfig | undefined;
     }>;
     remove(id: string): import("../../generated/prisma/models.js").Prisma__CategoryClient<{
-        id: number;
         name: string;
         slug: string;
+        id: number;
     }, never, import("@prisma/client/runtime/client.js").DefaultArgs, {
         omit: import("../../generated/prisma/internal/prismaNamespace.js").GlobalOmitConfig | undefined;
     }>;

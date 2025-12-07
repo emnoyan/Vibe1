@@ -56,3 +56,32 @@ enum UserStatus {
   ACTIVE
   INACTIVE
 }
+
+model Invoice {
+  id            Int           @id @default(autoincrement())
+  customerName  String
+  customerEmail String
+  status        InvoiceStatus @default(PENDING)
+  invoiceDate   DateTime      @default(now())
+  invoiceNumber String        @unique
+  total         Decimal       @db.Decimal(10, 2)
+  items         InvoiceItem[]
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
+
+model InvoiceItem {
+  id          Int     @id @default(autoincrement())
+  invoice     Invoice @relation(fields: [invoiceId], references: [id], onDelete: Cascade)
+  invoiceId   Int
+  description String
+  quantity    Int
+  price       Decimal @db.Decimal(10, 2)
+  total       Decimal @db.Decimal(10, 2)
+}
+
+enum InvoiceStatus {
+  PENDING
+  PAID
+  CANCELLED
+}

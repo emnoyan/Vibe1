@@ -106,7 +106,7 @@ const handleDeletePost = async (id: number) => {
 
 <template>
   <div class="h-full">
-      <div class="mb-8 flex items-center justify-between">
+      <div class="sticky top-0 z-10 bg-gray-50 py-4 px-8 flex items-center justify-between border-b border-gray-200/50 backdrop-blur-sm bg-gray-50/95">
           <div>
             <h1 class="text-2xl font-bold tracking-tight text-gray-900">Post Management</h1>
             <p class="mt-1 text-sm text-gray-500">Create, edit, and manage blog posts.</p>
@@ -117,12 +117,13 @@ const handleDeletePost = async (id: number) => {
           </button>
       </div>
 
+       <div class="p-8">
        <div v-if="error" class="mb-4 rounded-md bg-red-50 p-4 text-sm text-red-700">
            {{ error }}
        </div>
 
        <!-- Stats -->
-       <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+       <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3 mt-4">
           <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
             <div class="flex items-center gap-4">
               <div class="rounded-full bg-indigo-50 p-3 text-indigo-600">
@@ -254,5 +255,6 @@ const handleDeletePost = async (id: number) => {
           @save="handleSavePost"
           @update="handleUpdatePost"
        />
+  </div>
   </div>
 </template>

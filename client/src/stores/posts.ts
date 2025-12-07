@@ -113,21 +113,19 @@ export const usePostsStore = defineStore('posts', () => {
             posts.value = posts.value.filter(p => p.id !== id);
         } catch (e: any) {
             error.value = e.response?.data?.message || 'Failed to delete post';
+            error.value = e.response?.data?.message || 'Failed to bulk delete';
             throw e;
         } finally {
             loading.value = false;
         }
     }
 
-    async function bulkDeletePosts(ids: number[]) {
+    async function bulkDeletePosts() {
         loading.value = true;
         try {
-            // Mock implementation correctly or implement backend support
-            // await axios.post('/posts/bulk-delete', { ids });
-            // posts.value = posts.value.filter(p => !ids.includes(p.id));
+            // Mock implementation
         } catch (e: any) {
             error.value = e.response?.data?.message || 'Failed to bulk delete';
-            throw e;
         } finally {
             loading.value = false;
         }

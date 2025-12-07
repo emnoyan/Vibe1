@@ -7,8 +7,10 @@ import { AuthModule } from './auth/auth.module.js';
 import { PostsModule } from './posts/posts.module.js';
 import { CategoriesModule } from './categories/categories.module.js';
 
+import { InvoicesModule } from './invoices/invoices.module.js';
+
 @Module({
-  imports: [PrismaModule, UsersModule, AuthModule, PostsModule, CategoriesModule],
+  imports: [PrismaModule, UsersModule, AuthModule, PostsModule, CategoriesModule, InvoicesModule],
   controllers: [AppController],
   providers: [AppService],
 })

@@ -13,8 +13,15 @@ export class CategoriesService {
     });
   }
 
-  findAll() {
-    return this.prisma.category.findMany();
+  findAll(params: { skip?: number; take?: number; cursor?: any; where?: any; orderBy?: any } = {}) {
+    const { skip, take, cursor, where, orderBy } = params;
+    return this.prisma.category.findMany({
+      skip,
+      take,
+      cursor,
+      where,
+      orderBy,
+    });
   }
 
   findOne(id: number) {

@@ -7,11 +7,11 @@ export const useCategoriesStore = defineStore('categories', () => {
     const loading = ref(false);
     const error = ref<string | null>(null);
 
-    async function fetchCategories() {
+    async function fetchCategories(params: any = {}) {
         loading.value = true;
         error.value = null;
         try {
-            const response = await axios.get('/categories');
+            const response = await axios.get('/categories', { params });
             categories.value = response.data;
         } catch (e: any) {
             error.value = e.response?.data?.message || 'Failed to fetch categories';

@@ -23,6 +23,10 @@ const allSelected = computed(() => {
   return users.value.length > 0 && selectedUserIds.value.length === users.value.length;
 });
 
+const indeterminate = computed(() => {
+    return selectedUserIds.value.length > 0 && selectedUserIds.value.length < users.value.length;
+});
+
 const toggleAll = () => {
   if (allSelected.value) {
     selectedUserIds.value = [];
@@ -129,9 +133,7 @@ const handleDeleteUser = async (id: number) => {
   }
 };
 
-const handleLogout = () => {
-  authStore.logout();
-};
+
 
 const handleCloseModal = () => {
   isModalOpen.value = false;
@@ -140,7 +142,6 @@ const handleCloseModal = () => {
 </script>
 
 <template>
-
   <div class="h-full">
     <div v-if="error && error.toLowerCase().includes('forbidden')" class="flex h-full flex-col items-center justify-center text-center">
       <div class="rounded-full bg-red-100 p-3">
@@ -154,41 +155,44 @@ const handleCloseModal = () => {
     </div>
 
     <div v-else class="h-full">
-      <div class="mb-8 flex items-center justify-between">
-      <div>
-        <h1 class="text-2xl font-bold tracking-tight text-gray-900">User Management</h1>
-        <p class="mt-1 text-sm text-gray-500">Manage your team members and their account permissions.</p>
+      <div class="sticky top-0 z-10 bg-gray-50 py-4 px-8 sm:flex sm:items-center border-b border-gray-200/50 backdrop-blur-sm bg-gray-50/95 sticky-header">
+        <div class="sm:flex-auto">
+          <h1 class="text-2xl font-bold tracking-tight text-gray-900">User Management</h1>
+          <p class="mt-1 text-sm text-gray-500">Manage your team members and their account permissions.</p>
+        </div>
+        <div class="mt-4 sm:ml-16 sm:mt-0 sm:flex-none flex items-center gap-3">
+          <button 
+            v-if="selectedUserIds.length > 0 && $can('delete', 'User')"
+            @click="handleBulkDelete"
+            :disabled="loading"
+            class="inline-flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
+             Delete Selected ({{ selectedUserIds.length }})
+          </button>
+          
+          <button 
+            v-if="$can('create', 'User')"
+            @click="openCreateModal"
+            :disabled="loading"
+            class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
+            Add Member
+          </button>
+        </div>
       </div>
-      <button 
-        v-if="$can('create', 'User')"
-        @click="openCreateModal"
-        :disabled="loading"
-        class="inline-flex items-center gap-2 rounded-lg bg-indigo-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-plus"><path d="M5 12h14"/><path d="M12 5v14"/></svg>
-        Add Member
-      </button>
 
-      <button 
-        v-if="$can('delete', 'User') && selectedUserIds.length > 0"
-        @click="handleBulkDelete"
-        :disabled="loading"
-        class="ml-3 inline-flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2.5 text-sm font-semibold text-white shadow-sm hover:bg-red-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-red-600 transition-all disabled:opacity-50 disabled:cursor-not-allowed"
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>
-        Delete Selected ({{ selectedUserIds.length }})
-      </button>
-    </div>
-
+    <div class="p-8">
     <div v-if="error && !isModalOpen" class="mb-8 rounded-md bg-red-50 p-4 text-sm text-red-700">
       {{ error }}
     </div>
 
-    <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3">
+    <div class="mb-8 grid grid-cols-1 gap-4 sm:grid-cols-3 mt-4">
       <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm">
         <div class="flex items-center gap-4">
           <div class="rounded-full bg-indigo-50 p-3 text-indigo-600">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
           </div>
           <div>
             <p class="text-sm font-medium text-gray-500">Total Users</p>
@@ -261,8 +265,8 @@ const handleCloseModal = () => {
         <table class="w-full text-left text-sm">
           <thead class="bg-gray-50 border-b border-gray-100">
             <tr>
-              <th scope="col" class="px-6 py-4 w-10">
-                <input type="checkbox" :checked="allSelected" @change="toggleAll" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+              <th scope="col" class="relative px-7 sm:w-12 sm:px-6">
+                <input type="checkbox" :checked="allSelected" :indeterminate="indeterminate" @change="toggleAll" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
               </th>
               <th scope="col" class="px-6 py-4 font-medium text-gray-500 cursor-pointer hover:text-gray-700" @click="toggleSort('name')">
                 User Info
@@ -286,9 +290,10 @@ const handleCloseModal = () => {
             <tr v-else-if="users.length === 0">
               <td colspan="5" class="px-6 py-4 text-center text-gray-500">No users found.</td>
             </tr>
-            <tr v-for="user in users" :key="user.id" class="hover:bg-gray-50/50 transition-colors">
-              <td class="px-6 py-4">
-                <input type="checkbox" :checked="selectedUserIds.includes(user.id)" @change="toggleSelection(user.id)" class="h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
+            <tr v-for="user in users" :key="user.id" :class="[selectedUserIds.includes(user.id) ? 'bg-gray-50' : 'hover:bg-gray-50/50', 'transition-colors']">
+              <td class="relative px-7 sm:w-12 sm:px-6">
+                <div v-if="selectedUserIds.includes(user.id)" class="absolute inset-y-0 left-0 w-0.5 bg-indigo-600"></div>
+                <input type="checkbox" :checked="selectedUserIds.includes(user.id)" @change="toggleSelection(user.id)" class="absolute left-4 top-1/2 -mt-2 h-4 w-4 rounded border-gray-300 text-indigo-600 focus:ring-indigo-600">
               </td>
               <td class="px-6 py-4">
                 <div class="flex items-center gap-3">
@@ -323,6 +328,8 @@ const handleCloseModal = () => {
         </table>
       </div>
     </div>
+    </div>
+    </div>
 
     <UserModal 
       :isOpen="isModalOpen" 
@@ -333,6 +340,5 @@ const handleCloseModal = () => {
       @save="handleSaveUser" 
       @update="handleUpdateUser"
     />
-    </div>
   </div>
 </template>

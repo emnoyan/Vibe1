@@ -26,7 +26,7 @@ watch(() => route.path, () => {
     
     <div class="flex flex-1 flex-col overflow-hidden">
       <Header @toggle-sidebar="sidebarOpen = !sidebarOpen" />
-      <main class="flex-1 overflow-y-auto bg-gray-50 p-8">
+      <main class="flex-1 overflow-y-auto bg-gray-50">
         <slot />
       </main>
     </div>

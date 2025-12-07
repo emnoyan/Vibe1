@@ -15,12 +15,13 @@ const navigation = computed(() => {
   if (authStore.user?.role === 'ADMIN') {
     nav.push({ name: 'Users', href: '/admin/users', icon: 'Users' });
     nav.push({ name: 'Categories', href: '/admin/categories', icon: 'Folder' });
+    nav.push({ name: 'Invoices', href: '/admin/invoices', icon: 'DocumentDuplicate' });
   }
 
   return nav;
 });
 
-const props = defineProps<{
+defineProps<{
   isOpen: boolean
 }>();
 

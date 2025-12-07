@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards } from '@nestjs/common';
+import { Controller, Get, Post, Body, Patch, Param, Delete, UseGuards, Query } from '@nestjs/common';
 import { CategoriesService } from './categories.service.js';
 import { CreateCategoryDto } from './dto/create-category.dto.js';
 import { UpdateCategoryDto } from './dto/update-category.dto.js';
@@ -21,8 +21,20 @@ export class CategoriesController {
 
   @Public()
   @Get()
-  findAll() {
-    return this.categoriesService.findAll();
+  findAll(
+    @Query('q') q?: string,
+    @Query('sortBy') sortBy?: string,
+    @Query('sortOrder') sortOrder?: 'asc' | 'desc',
+  ) {
+    const where: any = {};
+    if (q) {
+      where.OR = [
+        { name: { contains: q, mode: 'insensitive' } },
+        { slug: { contains: q, mode: 'insensitive' } },
+      ];
+    }
+    const orderBy = sortBy ? { [sortBy]: sortOrder || 'desc' } : undefined;
+    return this.categoriesService.findAll({ where, orderBy });
   }
 
   @Public()

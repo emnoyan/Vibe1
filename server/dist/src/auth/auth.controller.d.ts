@@ -30,6 +30,7 @@ export declare class AuthController {
         refresh_token: string;
     }>;
     logout(req: any): Promise<{
+        id: number;
         email: string;
         password: string;
         name: string | null;
@@ -39,7 +40,6 @@ export declare class AuthController {
         hashedRefreshToken: string | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
     }>;
     refresh(body: {
         refresh_token: string;

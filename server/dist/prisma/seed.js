@@ -35,8 +35,18 @@ var __importStar = (this && this.__importStar) || (function () {
 Object.defineProperty(exports, "__esModule", { value: true });
 const client_1 = require("../generated/prisma/client");
 const bcrypt = __importStar(require("bcrypt"));
-const string_utils_js_1 = require("../src/common/utils/string.utils.js");
-const prisma = new client_1.PrismaClient({});
+const string_utils_1 = require("../src/common/utils/string.utils");
+const adapter_pg_1 = require("@prisma/adapter-pg");
+const pg_1 = require("pg");
+const url = new URL(process.env.DATABASE_URL);
+url.searchParams.delete('sslmode');
+const connectionString = url.toString();
+const pool = new pg_1.Pool({
+    connectionString,
+    ssl: { rejectUnauthorized: false },
+});
+const adapter = new adapter_pg_1.PrismaPg(pool);
+const prisma = new client_1.PrismaClient({ adapter });
 async function main() {
     const password = await bcrypt.hash('password123', 10);
     const admin = await prisma.user.upsert({
@@ -48,7 +58,7 @@ async function main() {
             password,
             role: 'ADMIN',
             status: 'ACTIVE',
-            searchText: (0, string_utils_js_1.removeAccents)('Admin User admin@example.com'),
+            searchText: (0, string_utils_1.removeAccents)('Admin User admin@example.com'),
         },
     });
     const mod = await prisma.user.upsert({
@@ -60,7 +70,7 @@ async function main() {
             password,
             role: 'MOD',
             status: 'ACTIVE',
-            searchText: (0, string_utils_js_1.removeAccents)('Moderator User mod@example.com'),
+            searchText: (0, string_utils_1.removeAccents)('Moderator User mod@example.com'),
         },
     });
     const user = await prisma.user.upsert({
@@ -72,7 +82,7 @@ async function main() {
             password,
             role: 'USER',
             status: 'ACTIVE',
-            searchText: (0, string_utils_js_1.removeAccents)('Regular User user@example.com'),
+            searchText: (0, string_utils_1.removeAccents)('Regular User user@example.com'),
         },
     });
     const tech = await prisma.category.upsert({
@@ -102,7 +112,7 @@ async function main() {
                 published: true,
                 authorId: admin.id,
                 categoryId: tech.id,
-                searchText: (0, string_utils_js_1.removeAccents)('Welcome to VibeCode This is the first admin post about Technology.'),
+                searchText: (0, string_utils_1.removeAccents)('Welcome to VibeCode This is the first admin post about Technology.'),
             },
         });
     }
@@ -115,8 +125,45 @@ async function main() {
                 published: true,
                 authorId: mod.id,
                 categoryId: life.id,
-                searchText: (0, string_utils_js_1.removeAccents)('Mod Life Update This is a post by the moderator about their Lifestyle.'),
+                searchText: (0, string_utils_1.removeAccents)('Mod Life Update This is a post by the moderator about their Lifestyle.'),
             },
+        });
+    }
+    const invoice1 = await prisma.invoice.findFirst({ where: { invoiceNumber: '20231201/0001' } });
+    if (!invoice1) {
+        await prisma.invoice.create({
+            data: {
+                customerName: 'John Doe',
+                customerEmail: 'john@example.com',
+                status: 'PENDING',
+                invoiceNumber: '20231201/0001',
+                invoiceDate: new Date('2023-12-01'),
+                total: 150.00,
+                items: {
+                    create: [
+                        { description: 'Web Design', quantity: 1, price: 100.00, total: 100.00 },
+                        { description: 'Hosting', quantity: 1, price: 50.00, total: 50.00 },
+                    ]
+                }
+            }
+        });
+    }
+    const invoice2 = await prisma.invoice.findFirst({ where: { invoiceNumber: '20231202/0001' } });
+    if (!invoice2) {
+        await prisma.invoice.create({
+            data: {
+                customerName: 'Jane Smith',
+                customerEmail: 'jane@example.com',
+                status: 'PAID',
+                invoiceNumber: '20231202/0001',
+                invoiceDate: new Date('2023-12-02'),
+                total: 200.00,
+                items: {
+                    create: [
+                        { description: 'Consulting', quantity: 2, price: 100.00, total: 200.00 },
+                    ]
+                }
+            }
         });
     }
     console.log('Seed data created.');

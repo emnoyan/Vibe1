@@ -62,6 +62,18 @@ const router = createRouter({
             component: AdminCategoriesView,
             meta: { requiresAuth: true, layout: 'AdminLayout' },
         },
+        {
+            path: '/admin/invoices',
+            name: 'admin-invoices',
+            component: () => import('@/views/admin/AdminInvoicesView.vue'),
+            meta: { requiresAuth: true, layout: 'AdminLayout' },
+        },
+        {
+            path: '/admin/invoices/:id',
+            name: 'admin-invoice-detail',
+            component: () => import('@/views/admin/AdminInvoiceDetailView.vue'),
+            meta: { requiresAuth: true, layout: 'AdminLayout' },
+        },
     ],
 });
 
@@ -73,7 +85,7 @@ router.beforeEach((to, _from, next) => {
     if (requiresAuth && !authStore.isAuthenticated) {
         next('/login');
     } else if (isGuest && authStore.isAuthenticated) {
-        if (authStore.user?.role === 'ADMIN' || authStore.user?.role === 'MOD') {
+        if (authStore.user?.role === 'ADMIN') {
             next('/admin/dashboard');
         } else {
             next('/');

@@ -14,6 +14,8 @@ export declare const ModelName: {
     readonly User: "User";
     readonly Post: "Post";
     readonly Category: "Category";
+    readonly Invoice: "Invoice";
+    readonly InvoiceItem: "InvoiceItem";
 };
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
 export declare const TransactionIsolationLevel: {
@@ -55,6 +57,27 @@ export declare const CategoryScalarFieldEnum: {
     readonly slug: "slug";
 };
 export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum];
+export declare const InvoiceScalarFieldEnum: {
+    readonly id: "id";
+    readonly customerName: "customerName";
+    readonly customerEmail: "customerEmail";
+    readonly status: "status";
+    readonly invoiceDate: "invoiceDate";
+    readonly invoiceNumber: "invoiceNumber";
+    readonly total: "total";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type InvoiceScalarFieldEnum = (typeof InvoiceScalarFieldEnum)[keyof typeof InvoiceScalarFieldEnum];
+export declare const InvoiceItemScalarFieldEnum: {
+    readonly id: "id";
+    readonly invoiceId: "invoiceId";
+    readonly description: "description";
+    readonly quantity: "quantity";
+    readonly price: "price";
+    readonly total: "total";
+};
+export type InvoiceItemScalarFieldEnum = (typeof InvoiceItemScalarFieldEnum)[keyof typeof InvoiceItemScalarFieldEnum];
 export declare const SortOrder: {
     readonly asc: "asc";
     readonly desc: "desc";

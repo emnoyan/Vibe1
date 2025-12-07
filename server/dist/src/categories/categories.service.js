@@ -22,8 +22,15 @@ let CategoriesService = class CategoriesService {
             data: createCategoryDto,
         });
     }
-    findAll() {
-        return this.prisma.category.findMany();
+    findAll(params = {}) {
+        const { skip, take, cursor, where, orderBy } = params;
+        return this.prisma.category.findMany({
+            skip,
+            take,
+            cursor,
+            where,
+            orderBy,
+        });
     }
     findOne(id) {
         return this.prisma.category.findUnique({ where: { id } });

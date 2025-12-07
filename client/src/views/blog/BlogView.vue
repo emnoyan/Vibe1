@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onMounted } from 'vue';
+import { onMounted } from 'vue';
 import { usePostsStore } from '@/stores/posts';
 import { storeToRefs } from 'pinia';
 import { useCategoriesStore } from '@/stores/categories';

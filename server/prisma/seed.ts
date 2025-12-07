@@ -114,6 +114,46 @@ async function main() {
         });
     }
 
+    // Invoices
+    const invoice1 = await prisma.invoice.findFirst({ where: { invoiceNumber: '20231201/0001' } });
+    if (!invoice1) {
+        await prisma.invoice.create({
+            data: {
+                customerName: 'John Doe',
+                customerEmail: 'john@example.com',
+                status: 'PENDING',
+                invoiceNumber: '20231201/0001',
+                invoiceDate: new Date('2023-12-01'),
+                total: 150.00,
+                items: {
+                    create: [
+                        { description: 'Web Design', quantity: 1, price: 100.00, total: 100.00 },
+                        { description: 'Hosting', quantity: 1, price: 50.00, total: 50.00 },
+                    ]
+                }
+            }
+        });
+    }
+
+    const invoice2 = await prisma.invoice.findFirst({ where: { invoiceNumber: '20231202/0001' } });
+    if (!invoice2) {
+        await prisma.invoice.create({
+            data: {
+                customerName: 'Jane Smith',
+                customerEmail: 'jane@example.com',
+                status: 'PAID',
+                invoiceNumber: '20231202/0001',
+                invoiceDate: new Date('2023-12-02'),
+                total: 200.00,
+                items: {
+                    create: [
+                        { description: 'Consulting', quantity: 2, price: 100.00, total: 200.00 },
+                    ]
+                }
+            }
+        });
+    }
+
     console.log('Seed data created.');
 }
 

@@ -30,8 +30,16 @@ let CategoriesController = class CategoriesController {
     create(createCategoryDto) {
         return this.categoriesService.create(createCategoryDto);
     }
-    findAll() {
-        return this.categoriesService.findAll();
+    findAll(q, sortBy, sortOrder) {
+        const where = {};
+        if (q) {
+            where.OR = [
+                { name: { contains: q, mode: 'insensitive' } },
+                { slug: { contains: q, mode: 'insensitive' } },
+            ];
+        }
+        const orderBy = sortBy ? { [sortBy]: sortOrder || 'desc' } : undefined;
+        return this.categoriesService.findAll({ where, orderBy });
     }
     findOne(id) {
         return this.categoriesService.findOne(+id);
@@ -56,8 +64,11 @@ __decorate([
 __decorate([
     (0, public_decorator_js_1.Public)(),
     (0, common_1.Get)(),
+    __param(0, (0, common_1.Query)('q')),
+    __param(1, (0, common_1.Query)('sortBy')),
+    __param(2, (0, common_1.Query)('sortOrder')),
     __metadata("design:type", Function),
-    __metadata("design:paramtypes", []),
+    __metadata("design:paramtypes", [String, String, String]),
     __metadata("design:returntype", void 0)
 ], CategoriesController.prototype, "findAll", null);
 __decorate([
