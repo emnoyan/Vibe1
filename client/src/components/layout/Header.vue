@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { useAuthStore } from '@/stores/auth';
+
 import { useRouter } from 'vue-router';
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 
 const authStore = useAuthStore();
 const router = useRouter();
@@ -28,6 +30,7 @@ const handleLogout = () => {
         <h1 class="text-2xl font-bold tracking-tight text-gray-900">{{ $t('common.dashboard') }}</h1>
       </div>
       <div class="flex items-center gap-4">
+        <LanguageSwitcher />
         <span class="text-sm font-medium text-gray-500" v-if="authStore.user">
           {{ authStore.user.name }} ({{ authStore.user.role }})
         </span>

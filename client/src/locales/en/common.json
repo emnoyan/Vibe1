@@ -6,5 +6,10 @@
     "settings": "Settings",
     "logout": "Logout",
     "welcome": "Welcome to VibeCode",
-    "language": "Language"
+    "language": "Language",
+    "date": "Date",
+    "customer": "Customer",
+    "status": "Status",
+    "total": "Total",
+    "total_invoices": "Total Invoices"
 }

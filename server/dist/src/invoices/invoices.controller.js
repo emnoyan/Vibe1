@@ -14,6 +14,7 @@ var __param = (this && this.__param) || function (paramIndex, decorator) {
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.InvoicesController = void 0;
 const common_1 = require("@nestjs/common");
+const nestjs_i18n_1 = require("nestjs-i18n");
 const invoices_service_1 = require("./invoices.service");
 const create_invoice_dto_1 = require("./dto/create-invoice.dto");
 const update_invoice_dto_1 = require("./dto/update-invoice.dto");
@@ -56,6 +57,7 @@ let InvoicesController = class InvoicesController {
         return this.invoicesService.update(+id, updateInvoiceDto);
     }
     remove(id) {
+        console.log('Delete Invoice Lang:', nestjs_i18n_1.I18nContext.current()?.lang);
         return this.invoicesService.remove(+id);
     }
 };

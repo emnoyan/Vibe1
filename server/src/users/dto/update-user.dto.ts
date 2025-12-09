@@ -16,4 +16,8 @@ export class UpdateUserDto extends PartialType(CreateUserDto) {
     @IsArray()
     @IsNumber({}, { each: true })
     managedCategoryIds?: number[];
+
+    @IsOptional()
+    @IsString()
+    language?: string;
 }

@@ -6,5 +6,10 @@
     "settings": "Cài đặt",
     "logout": "Đăng xuất",
     "welcome": "Chào mừng đến với VibeCode",
-    "language": "Ngôn ngữ"
+    "language": "Ngôn ngữ",
+    "date": "Ngày",
+    "customer": "Khách hàng",
+    "status": "Trạng thái",
+    "total": "Tổng cộng",
+    "total_invoices": "Tổng hóa đơn"
 }

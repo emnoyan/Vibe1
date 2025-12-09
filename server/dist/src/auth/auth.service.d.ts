@@ -34,16 +34,17 @@ export declare class AuthService {
         refresh_token: string;
     }>;
     logout(userId: number): Promise<{
+        id: number;
         email: string;
         password: string;
         name: string | null;
         role: import("../../generated/prisma/enums.js").Role;
         status: import("../../generated/prisma/enums.js").UserStatus;
+        language: string;
         searchText: string;
         hashedRefreshToken: string | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
     }>;
     refreshTokens(userId: number, rt: string): Promise<{
         access_token: string;

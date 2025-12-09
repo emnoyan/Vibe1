@@ -111,7 +111,7 @@ const handleSubmit = async () => {
   <div>
       <div class="sticky top-0 z-10 bg-gray-50 py-4 px-8 flex items-center justify-between border-b border-gray-200/50 backdrop-blur-sm bg-gray-50/95">
            <div>
-             <h1 class="text-2xl font-bold tracking-tight text-gray-900">{{ isEditMode ? 'Edit Invoice #' + route.params.id : 'Create New Invoice' }}</h1>
+             <h1 class="text-2xl font-bold tracking-tight text-gray-900">{{ isEditMode ? $t('button.edit') + ' ' + $t('menu.invoices') + ' #' + route.params.id : $t('button.create') + ' ' + $t('menu.invoices') }}</h1>
            </div>
            <div class="flex gap-3">
              <button @click="router.back()" type="button" class="rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50">{{ $t('button.cancel') }}</button>
@@ -124,14 +124,14 @@ const handleSubmit = async () => {
           <!-- Customer Info -->
           <div class="grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
             <div class="sm:col-span-3">
-              <label class="block text-sm font-medium leading-6 text-gray-900">Invoice Number</label>
+              <label class="block text-sm font-medium leading-6 text-gray-900">{{ $t('menu.invoices') }} #</label>
               <div class="mt-2">
                 <input :value="isEditMode ? form.invoiceNumber : 'Auto-generated'" type="text" disabled class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-500 shadow-sm ring-1 ring-inset ring-gray-300 bg-gray-50 sm:text-sm sm:leading-6">
               </div>
             </div>
 
             <div class="sm:col-span-3">
-              <label class="block text-sm font-medium leading-6 text-gray-900">Invoice Date</label>
+              <label class="block text-sm font-medium leading-6 text-gray-900">{{ $t('common.date') }}</label>
               <div class="mt-2">
                 <input v-model="form.invoiceDate" type="date" class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 <p v-if="errors.invoiceDate" class="mt-1 text-sm text-red-600">{{ errors.invoiceDate }}</p>
@@ -139,7 +139,7 @@ const handleSubmit = async () => {
             </div>
 
             <div class="sm:col-span-3">
-              <label class="block text-sm font-medium leading-6 text-gray-900">Customer Name</label>
+              <label class="block text-sm font-medium leading-6 text-gray-900">{{ $t('common.customer') }}</label>
               <div class="mt-2">
                 <input v-model="form.customerName" type="text" class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                  <p v-if="errors.customerName" class="mt-1 text-sm text-red-600">{{ errors.customerName }}</p>
@@ -147,7 +147,7 @@ const handleSubmit = async () => {
             </div>
 
             <div class="sm:col-span-3">
-              <label class="block text-sm font-medium leading-6 text-gray-900">Customer Email</label>
+              <label class="block text-sm font-medium leading-6 text-gray-900">{{ $t('auth.email_label') }}</label>
               <div class="mt-2">
                 <input v-model="form.customerEmail" type="email" class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                 <p v-if="errors.customerEmail" class="mt-1 text-sm text-red-600">{{ errors.customerEmail }}</p>
@@ -155,7 +155,7 @@ const handleSubmit = async () => {
             </div>
 
             <div class="sm:col-span-3">
-              <label class="block text-sm font-medium leading-6 text-gray-900">Status</label>
+              <label class="block text-sm font-medium leading-6 text-gray-900">{{ $t('common.status') }}</label>
               <div class="mt-2">
                 <select v-model="form.status" class="block w-full rounded-md border-0 py-1.5 px-3 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                   <option value="PENDING">Pending</option>
@@ -169,8 +169,8 @@ const handleSubmit = async () => {
           <!-- Items -->
           <div>
               <div class="flex items-center justify-between mb-4">
-                  <h2 class="text-base font-semibold leading-7 text-gray-900">Invoice Items</h2>
-                  <button @click="addItem" type="button" class="text-sm font-semibold text-indigo-600 hover:text-indigo-500">+ Add Item</button>
+                  <h2 class="text-base font-semibold leading-7 text-gray-900">{{ $t('menu.invoices') }} Items</h2>
+                  <button @click="addItem" type="button" class="text-sm font-semibold text-indigo-600 hover:text-indigo-500">+ {{ $t('button.create') }} Item</button>
               </div>
               <p v-if="errors.items" class="mb-4 text-sm text-red-600">{{ errors.items }}</p>
               
@@ -231,7 +231,7 @@ const handleSubmit = async () => {
                       </tbody>
                       <tfoot>
                           <tr>
-                              <td colspan="3" class="text-right py-4 px-3 font-bold text-gray-900">Total</td>
+                              <td colspan="3" class="text-right py-4 px-3 font-bold text-gray-900">{{ $t('common.total') }}</td>
                               <td class="py-4 px-3 font-bold text-indigo-600 text-lg">${{ calculatedTotal }}</td>
                               <td></td>
                           </tr>

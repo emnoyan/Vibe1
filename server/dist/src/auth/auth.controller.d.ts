@@ -30,16 +30,17 @@ export declare class AuthController {
         refresh_token: string;
     }>;
     logout(req: any): Promise<{
+        id: number;
         email: string;
         password: string;
         name: string | null;
         role: import("../../generated/prisma/enums.js").Role;
         status: import("../../generated/prisma/enums.js").UserStatus;
+        language: string;
         searchText: string;
         hashedRefreshToken: string | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
     }>;
     refresh(body: {
         refresh_token: string;

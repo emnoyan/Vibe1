@@ -1,6 +1,6 @@
 import { defineStore } from 'pinia';
 import { ref } from 'vue';
-import axios from 'axios';
+import axios from '@/plugins/axios';
 
 export const useInvoicesStore = defineStore('invoices', () => {
     const invoices = ref<any[]>([]);
@@ -90,19 +90,48 @@ export const useInvoicesStore = defineStore('invoices', () => {
         loading.value = true;
         error.value = null;
         try {
-            // Execute all deletes concurrently
-            await Promise.all(ids.map(id => axios.delete(`http://localhost:3000/invoices/${id}`)));
-            // Update local state
-            invoices.value = invoices.value.filter(i => !ids.includes(i.id));
-        } catch (err: any) {
-            const msg = err.response?.data?.message;
-            const errorMsg = Array.isArray(msg) ? msg.join(', ') : (msg || err.message || 'Failed to delete invoices');
+            // Execute all deletes concurrently and wait for all to finish
+            const results = await Promise.allSettled(ids.map(id => axios.delete(`http://localhost:3000/invoices/${id}`)));
 
-            // Refresh to ensure sync with server even on partial failure
-            // This will clear the error state, so we need to restore it after
+            // Process results
+            const failedMessages: string[] = [];
+            let successCount = 0;
+            let failedCount = 0;
+
+            results.forEach((result) => {
+                if (result.status === 'rejected') {
+                    failedCount++;
+                    const err = result.reason;
+                    const msg = err.response?.data?.message;
+                    failedMessages.push(Array.isArray(msg) ? msg.join(', ') : (msg || err.message || 'Failed to delete invoice'));
+                } else {
+                    successCount++;
+                }
+            });
+
+            if (failedMessages.length > 0) {
+                // Set error if any failed. Use Set to remove duplicates (e.g. multiple "Cannot delete PAID")
+                error.value = [...new Set(failedMessages)].join('; ');
+            }
+
+            // Always refresh list to ensure sync with server state (successful deletes will be gone)
             await fetchInvoices();
 
-            error.value = errorMsg;
+            return {
+                success: successCount,
+                failed: failedCount,
+                messages: [...new Set(failedMessages)]
+            };
+
+        } catch (err: any) {
+            console.error('Unexpected error in bulk delete:', err);
+            error.value = 'An unexpected error occurred during bulk delete: ' + (err.message || String(err));
+            await fetchInvoices();
+            return {
+                success: 0,
+                failed: ids.length,
+                messages: ['Unexpected error: ' + (err.message || String(err))]
+            };
         } finally {
             loading.value = false;
         }

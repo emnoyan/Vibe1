@@ -11,21 +11,22 @@ export declare class UsersService {
     onModuleInit(): Promise<void>;
     create(createUserDto: CreateUserDto): Promise<{
         managedCategories: {
-            name: string;
             id: number;
+            name: string;
             slug: string;
         }[];
     } & {
+        id: number;
         email: string;
         password: string;
         name: string | null;
         role: import("generated/prisma/client").Role;
         status: import("generated/prisma/client").UserStatus;
+        language: string;
         searchText: string;
         hashedRefreshToken: string | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
     }>;
     findAll(params?: {
         q?: string;
@@ -37,51 +38,54 @@ export declare class UsersService {
     findOne(id: number): Promise<UserEntity | null>;
     findOneByEmail(email: string): Promise<({
         managedCategories: {
-            name: string;
             id: number;
+            name: string;
             slug: string;
         }[];
     } & {
+        id: number;
         email: string;
         password: string;
         name: string | null;
         role: import("generated/prisma/client").Role;
         status: import("generated/prisma/client").UserStatus;
+        language: string;
         searchText: string;
         hashedRefreshToken: string | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
     }) | null>;
     update(id: number, updateUserDto: UpdateUserDto): Promise<{
         managedCategories: {
-            name: string;
             id: number;
+            name: string;
             slug: string;
         }[];
     } & {
+        id: number;
         email: string;
         password: string;
         name: string | null;
         role: import("generated/prisma/client").Role;
         status: import("generated/prisma/client").UserStatus;
+        language: string;
         searchText: string;
         hashedRefreshToken: string | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
     }>;
     remove(id: number): Prisma.Prisma__UserClient<{
+        id: number;
         email: string;
         password: string;
         name: string | null;
         role: import("generated/prisma/client").Role;
         status: import("generated/prisma/client").UserStatus;
+        language: string;
         searchText: string;
         hashedRefreshToken: string | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
     }, never, import("@prisma/client/runtime/client.js").DefaultArgs, {
         omit: Prisma.GlobalOmitConfig | undefined;
     }>;
@@ -94,15 +98,16 @@ export declare class UsersService {
         user: number;
     }>;
     updateRefreshToken(id: number, hashedRefreshToken: string | null): Promise<{
+        id: number;
         email: string;
         password: string;
         name: string | null;
         role: import("generated/prisma/client").Role;
         status: import("generated/prisma/client").UserStatus;
+        language: string;
         searchText: string;
         hashedRefreshToken: string | null;
         createdAt: Date;
         updatedAt: Date;
-        id: number;
     }>;
 }

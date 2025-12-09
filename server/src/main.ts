@@ -11,4 +11,5 @@ async function bootstrap() {
   app.enableCors();
   await app.listen(process.env.PORT ?? 3000);
 }
+// Restart after reverting to custom Prisma Client
 bootstrap();

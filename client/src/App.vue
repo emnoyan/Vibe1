@@ -3,7 +3,6 @@ import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import AdminLayout from '@/layouts/AdminLayout.vue';
 import PublicLayout from '@/layouts/PublicLayout.vue';
-import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 
 const route = useRoute();
 const layout = computed(() => {
@@ -15,7 +14,6 @@ const layout = computed(() => {
 
 <template>
   <div class="app-container">
-    <LanguageSwitcher class="fixed-switcher" />
     <component :is="layout">
       <RouterView />
     </component>
@@ -23,10 +21,5 @@ const layout = computed(() => {
 </template>
 
 <style scoped>
-.fixed-switcher {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 9999;
-}
+/* Styles removed */
 </style>

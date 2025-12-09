@@ -33,7 +33,7 @@ var __importStar = (this && this.__importStar) || (function () {
     };
 })();
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.NullsOrder = exports.QueryMode = exports.SortOrder = exports.InvoiceItemScalarFieldEnum = exports.InvoiceScalarFieldEnum = exports.CategoryScalarFieldEnum = exports.PostScalarFieldEnum = exports.UserScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.Decimal = void 0;
+exports.NullsOrder = exports.QueryMode = exports.SortOrder = exports.TranslationScalarFieldEnum = exports.InvoiceItemScalarFieldEnum = exports.InvoiceScalarFieldEnum = exports.CategoryScalarFieldEnum = exports.PostScalarFieldEnum = exports.UserScalarFieldEnum = exports.TransactionIsolationLevel = exports.ModelName = exports.AnyNull = exports.JsonNull = exports.DbNull = exports.NullTypes = exports.Decimal = void 0;
 const runtime = __importStar(require("@prisma/client/runtime/index-browser"));
 exports.Decimal = runtime.Decimal;
 exports.NullTypes = {
@@ -49,7 +49,8 @@ exports.ModelName = {
     Post: 'Post',
     Category: 'Category',
     Invoice: 'Invoice',
-    InvoiceItem: 'InvoiceItem'
+    InvoiceItem: 'InvoiceItem',
+    Translation: 'Translation'
 };
 exports.TransactionIsolationLevel = {
     ReadUncommitted: 'ReadUncommitted',
@@ -64,6 +65,7 @@ exports.UserScalarFieldEnum = {
     name: 'name',
     role: 'role',
     status: 'status',
+    language: 'language',
     searchText: 'searchText',
     hashedRefreshToken: 'hashedRefreshToken',
     createdAt: 'createdAt',
@@ -104,6 +106,14 @@ exports.InvoiceItemScalarFieldEnum = {
     quantity: 'quantity',
     price: 'price',
     total: 'total'
+};
+exports.TranslationScalarFieldEnum = {
+    id: 'id',
+    key: 'key',
+    locale: 'locale',
+    value: 'value',
+    createdAt: 'createdAt',
+    updatedAt: 'updatedAt'
 };
 exports.SortOrder = {
     asc: 'asc',

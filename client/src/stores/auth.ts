@@ -12,6 +12,7 @@ interface User {
     name: string;
     role: 'ADMIN' | 'USER';
     status: string;
+    language?: string;
 }
 
 export const useAuthStore = defineStore('auth', () => {
@@ -38,6 +39,9 @@ export const useAuthStore = defineStore('auth', () => {
 
     if (user.value) {
         updateAbility(user.value);
+        // Set language if user has preference
+        // Initial language setting is handled by App.vue or main.ts watching user state, 
+        // or by the components themselves. Store just holds the data.
     }
 
     async function login(email: string, password: string) {
@@ -116,6 +120,21 @@ export const useAuthStore = defineStore('auth', () => {
         router.push('/login');
     }
 
+    async function updateLanguage(language: string) {
+        if (!user.value) return;
+
+        // Optimistic update
+        user.value.language = language;
+        localStorage.setItem('user', JSON.stringify(user.value));
+
+        try {
+            await axios.patch(`/users/${user.value.id}`, { language });
+        } catch (e) {
+            console.error('Failed to persist language preference', e);
+            // Revert on failure? Or just log warn.
+        }
+    }
+
     return {
         user,
         token,
@@ -126,6 +145,7 @@ export const useAuthStore = defineStore('auth', () => {
         isAdmin,
         login,
         register,
-        logout
+        logout,
+        updateLanguage
     };
 });

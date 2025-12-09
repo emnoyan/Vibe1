@@ -80,6 +80,7 @@ exports.UserScalarFieldEnum = {
     name: 'name',
     role: 'role',
     status: 'status',
+    language: 'language',
     searchText: 'searchText',
     hashedRefreshToken: 'hashedRefreshToken',
     createdAt: 'createdAt',

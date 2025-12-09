@@ -4,7 +4,7 @@ datasource db {
 
 generator client {
   provider = "prisma-client"
-  output   = "../generated/prisma/client"
+  output   = "../generated/prisma"
   moduleFormat    = "cjs"
 }
 
@@ -15,6 +15,7 @@ model User {
   name      String?
   role      Role     @default(USER)
   status    UserStatus @default(ACTIVE)
+  language  String     @default("en")
   searchText String   @default("")
   hashedRefreshToken String?
   posts     Post[]

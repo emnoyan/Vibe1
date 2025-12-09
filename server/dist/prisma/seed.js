@@ -168,6 +168,7 @@ async function main() {
         });
     }
     console.log('Seeding translations...');
+    await prisma.$executeRaw `DELETE FROM "Translation" WHERE "key" IN ('INVOICE_DELETE_PAID_ERROR', 'AUTH_ACCOUNT_INACTIVE', 'AUTH_INVALID_CREDENTIALS', 'USER_EMAIL_EXISTS', 'POST_NOT_FOUND')`;
     const translations = [
         { key: 'common.hello', locale: 'en', value: 'Hello' },
         { key: 'common.hello', locale: 'vi', value: 'Xin chào' },
@@ -175,6 +176,16 @@ async function main() {
         { key: 'common.welcome', locale: 'vi', value: 'Chào mừng đến với VibeCode' },
         { key: 'common.login', locale: 'en', value: 'Login' },
         { key: 'common.login', locale: 'vi', value: 'Đăng nhập' },
+        { key: 'common.total_invoices', locale: 'en', value: 'Total Invoices' },
+        { key: 'common.total_invoices', locale: 'vi', value: 'Tổng hóa đơn' },
+        { key: 'common.date', locale: 'en', value: 'Date' },
+        { key: 'common.date', locale: 'vi', value: 'Ngày' },
+        { key: 'common.customer', locale: 'en', value: 'Customer' },
+        { key: 'common.customer', locale: 'vi', value: 'Khách hàng' },
+        { key: 'common.status', locale: 'en', value: 'Status' },
+        { key: 'common.status', locale: 'vi', value: 'Trạng thái' },
+        { key: 'common.total', locale: 'en', value: 'Total' },
+        { key: 'common.total', locale: 'vi', value: 'Tổng cộng' },
         { key: 'users.not_found', locale: 'en', value: 'User not found' },
         { key: 'users.not_found', locale: 'vi', value: 'Người dùng không tồn tại' },
         { key: 'common.forbidden', locale: 'en', value: 'Access denied' },
@@ -207,10 +218,22 @@ async function main() {
         { key: 'button.cancel', locale: 'vi', value: 'Hủy' },
         { key: 'button.delete', locale: 'en', value: 'Delete' },
         { key: 'button.delete', locale: 'vi', value: 'Xóa' },
+        { key: 'button.create', locale: 'en', value: 'Create' },
+        { key: 'button.create', locale: 'vi', value: 'Tạo mới' },
+        { key: 'button.edit', locale: 'en', value: 'Edit' },
+        { key: 'button.edit', locale: 'vi', value: 'Sửa' },
+        { key: 'button.search', locale: 'en', value: 'Search' },
+        { key: 'button.search', locale: 'vi', value: 'Tìm kiếm' },
         { key: 'message.success', locale: 'en', value: 'Success' },
         { key: 'message.success', locale: 'vi', value: 'Thành công' },
         { key: 'message.error', locale: 'en', value: 'Error' },
         { key: 'message.error', locale: 'vi', value: 'Lỗi' },
+        { key: 'message.confirm_delete', locale: 'en', value: 'Are you sure you want to delete this item?' },
+        { key: 'message.confirm_delete', locale: 'vi', value: 'Bạn có chắc chắn muốn xóa mục này không?' },
+        { key: 'message.loading', locale: 'en', value: 'Loading...' },
+        { key: 'message.loading', locale: 'vi', value: 'Đang tải...' },
+        { key: 'message.no_data', locale: 'en', value: 'No data found' },
+        { key: 'message.no_data', locale: 'vi', value: 'Không tìm thấy dữ liệu' },
     ];
     for (const t of translations) {
         await prisma.$executeRaw `

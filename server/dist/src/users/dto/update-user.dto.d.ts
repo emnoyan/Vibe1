@@ -5,5 +5,6 @@ export declare class UpdateUserDto extends UpdateUserDto_base {
     role?: Role;
     status?: UserStatus;
     managedCategoryIds?: number[];
+    language?: string;
 }
 export {};

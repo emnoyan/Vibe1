@@ -1,4 +1,5 @@
 import { Controller, Get, Post, Body, Patch, Param, Delete, Query } from '@nestjs/common';
+import { I18nContext } from 'nestjs-i18n';
 import { InvoicesService } from './invoices.service';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
@@ -61,6 +62,7 @@ export class InvoicesController {
 
     @Delete(':id')
     remove(@Param('id') id: string) {
+        console.log('Delete Invoice Lang:', I18nContext.current()?.lang);
         return this.invoicesService.remove(+id);
     }
 }

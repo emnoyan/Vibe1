@@ -11,3 +11,4 @@ export type Post = Prisma.PostModel;
 export type Category = Prisma.CategoryModel;
 export type Invoice = Prisma.InvoiceModel;
 export type InvoiceItem = Prisma.InvoiceItemModel;
+export type Translation = Prisma.TranslationModel;

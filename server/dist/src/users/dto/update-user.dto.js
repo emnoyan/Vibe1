@@ -18,6 +18,7 @@ class UpdateUserDto extends (0, mapped_types_1.PartialType)(create_user_dto_js_1
     role;
     status;
     managedCategoryIds;
+    language;
 }
 exports.UpdateUserDto = UpdateUserDto;
 __decorate([
@@ -36,4 +37,9 @@ __decorate([
     (0, class_validator_1.IsNumber)({}, { each: true }),
     __metadata("design:type", Array)
 ], UpdateUserDto.prototype, "managedCategoryIds", void 0);
+__decorate([
+    (0, class_validator_1.IsOptional)(),
+    (0, class_validator_1.IsString)(),
+    __metadata("design:type", String)
+], UpdateUserDto.prototype, "language", void 0);
 //# sourceMappingURL=update-user.dto.js.map

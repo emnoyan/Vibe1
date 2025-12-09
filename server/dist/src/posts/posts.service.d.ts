@@ -11,14 +11,14 @@ export declare class PostsService {
     constructor(prisma: PrismaService, abilityFactory: CaslAbilityFactory, i18n: I18nService);
     onModuleInit(): Promise<void>;
     create(createPostDto: CreatePostDto, authorId: number): Prisma.Prisma__PostClient<{
+        id: number;
+        searchText: string;
         createdAt: Date;
         updatedAt: Date;
         published: boolean;
         title: string;
         content: string | null;
         image: string | null;
-        searchText: string;
-        id: number;
         authorId: number | null;
         categoryId: number | null;
     }, never, import("@prisma/client/runtime/client.js").DefaultArgs, {
@@ -35,74 +35,74 @@ export declare class PostsService {
         orderBy?: Prisma.PostOrderByWithRelationInput;
         where?: Prisma.PostWhereInput;
     }): Prisma.PrismaPromise<({
-        author: {
-            id: number;
-            name: string | null;
-            email: string;
-        } | null;
         category: {
             id: number;
             name: string;
             slug: string;
         } | null;
+        author: {
+            id: number;
+            email: string;
+            name: string | null;
+        } | null;
     } & {
+        id: number;
+        searchText: string;
         createdAt: Date;
         updatedAt: Date;
         published: boolean;
         title: string;
         content: string | null;
         image: string | null;
-        searchText: string;
-        id: number;
         authorId: number | null;
         categoryId: number | null;
     })[]>;
     findOne(id: number): Prisma.Prisma__PostClient<({
-        author: {
-            id: number;
-            name: string | null;
-            email: string;
-        } | null;
         category: {
             id: number;
             name: string;
             slug: string;
         } | null;
+        author: {
+            id: number;
+            email: string;
+            name: string | null;
+        } | null;
     } & {
+        id: number;
+        searchText: string;
         createdAt: Date;
         updatedAt: Date;
         published: boolean;
         title: string;
         content: string | null;
         image: string | null;
-        searchText: string;
-        id: number;
         authorId: number | null;
         categoryId: number | null;
     }) | null, null, import("@prisma/client/runtime/client.js").DefaultArgs, {
         omit: Prisma.GlobalOmitConfig | undefined;
     }>;
     update(id: number, updatePostDto: UpdatePostDto, user: any): Promise<{
+        id: number;
+        searchText: string;
         createdAt: Date;
         updatedAt: Date;
         published: boolean;
         title: string;
         content: string | null;
         image: string | null;
-        searchText: string;
-        id: number;
         authorId: number | null;
         categoryId: number | null;
     }>;
     remove(id: number, user: any): Promise<{
+        id: number;
+        searchText: string;
         createdAt: Date;
         updatedAt: Date;
         published: boolean;
         title: string;
         content: string | null;
         image: string | null;
-        searchText: string;
-        id: number;
         authorId: number | null;
         categoryId: number | null;
     }>;

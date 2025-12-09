@@ -16,6 +16,7 @@ export declare const ModelName: {
     readonly Category: "Category";
     readonly Invoice: "Invoice";
     readonly InvoiceItem: "InvoiceItem";
+    readonly Translation: "Translation";
 };
 export type ModelName = (typeof ModelName)[keyof typeof ModelName];
 export declare const TransactionIsolationLevel: {
@@ -32,6 +33,7 @@ export declare const UserScalarFieldEnum: {
     readonly name: "name";
     readonly role: "role";
     readonly status: "status";
+    readonly language: "language";
     readonly searchText: "searchText";
     readonly hashedRefreshToken: "hashedRefreshToken";
     readonly createdAt: "createdAt";
@@ -78,6 +80,15 @@ export declare const InvoiceItemScalarFieldEnum: {
     readonly total: "total";
 };
 export type InvoiceItemScalarFieldEnum = (typeof InvoiceItemScalarFieldEnum)[keyof typeof InvoiceItemScalarFieldEnum];
+export declare const TranslationScalarFieldEnum: {
+    readonly id: "id";
+    readonly key: "key";
+    readonly locale: "locale";
+    readonly value: "value";
+    readonly createdAt: "createdAt";
+    readonly updatedAt: "updatedAt";
+};
+export type TranslationScalarFieldEnum = (typeof TranslationScalarFieldEnum)[keyof typeof TranslationScalarFieldEnum];
 export declare const SortOrder: {
     readonly asc: "asc";
     readonly desc: "desc";
