@@ -57,13 +57,12 @@ export class PostsService {
   }) {
     const { q, category, categoryId, authorId, published, skip, take, orderBy, where: explicitWhere } = params || {};
 
-    // Fix primitive type coercion for query params (string "true" -> boolean true)
     const isPublished = published === 'true' || published === true ? true : published === 'false' || published === false ? false : undefined;
 
     const where: Prisma.PostWhereInput = explicitWhere || {
       AND: [
         category ? { category: { slug: { equals: category, mode: 'insensitive' } } } : {},
-        categoryId ? { categoryId: Number(categoryId) } : {}, // Support ID based filtering
+        categoryId ? { categoryId: Number(categoryId) } : {},
         authorId ? { authorId } : {},
         isPublished !== undefined ? { published: isPublished } : {},
         q ? {
@@ -96,11 +95,11 @@ export class PostsService {
 
   async update(id: number, updatePostDto: UpdatePostDto, user: any) {
     const post = await this.findOne(id);
-    if (!post) throw new NotFoundException(I18nContext.current()?.t('POST_NOT_FOUND'));
+    if (!post) throw new NotFoundException(I18nContext.current()?.t('posts.not_found'));
 
     const ability = this.abilityFactory.createForUser(user);
     if (!ability.can(Action.Update, subject('Post', post))) {
-      throw new ForbiddenException(I18nContext.current()?.t('POST_UPDATE_FORBIDDEN'));
+      throw new ForbiddenException(I18nContext.current()?.t('posts.update_forbidden'));
     }
 
     const searchText = removeAccents(
@@ -119,11 +118,11 @@ export class PostsService {
 
   async remove(id: number, user: any) {
     const post = await this.findOne(id);
-    if (!post) throw new NotFoundException(I18nContext.current()?.t('POST_NOT_FOUND'));
+    if (!post) throw new NotFoundException(I18nContext.current()?.t('posts.not_found'));
 
     const ability = this.abilityFactory.createForUser(user);
     if (!ability.can(Action.Delete, subject('Post', post))) {
-      throw new ForbiddenException(I18nContext.current()?.t('POST_DELETE_FORBIDDEN'));
+      throw new ForbiddenException(I18nContext.current()?.t('posts.delete_forbidden'));
     }
 
     return this.prisma.post.delete({

@@ -89,7 +89,7 @@ let UsersService = class UsersService {
         }
         catch (error) {
             if (error instanceof client_1.Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-                throw new common_1.ConflictException(nestjs_i18n_1.I18nContext.current()?.t('USER_EMAIL_EXISTS'));
+                throw new common_1.ConflictException(nestjs_i18n_1.I18nContext.current()?.t('users.email_exists'));
             }
             throw error;
         }
@@ -171,7 +171,7 @@ let UsersService = class UsersService {
         }
         catch (error) {
             if (error instanceof client_1.Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-                throw new common_1.ConflictException(nestjs_i18n_1.I18nContext.current()?.t('USER_EMAIL_EXISTS'));
+                throw new common_1.ConflictException(nestjs_i18n_1.I18nContext.current()?.t('users.email_exists'));
             }
             throw error;
         }

@@ -1,0 +1,10 @@
+{
+    "login": "Login",
+    "register": "Register",
+    "dashboard": "Dashboard",
+    "users": "Users",
+    "settings": "Settings",
+    "logout": "Logout",
+    "welcome": "Welcome to VibeCode",
+    "language": "Language"
+}

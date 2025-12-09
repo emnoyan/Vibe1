@@ -1,0 +1,12 @@
+{
+    "success": "Thành công",
+    "error": "Lỗi",
+    "warning": "Cảnh báo",
+    "info": "Thông tin",
+    "saved_successfully": "Lưu thành công",
+    "updated_successfully": "Cập nhật thành công",
+    "deleted_successfully": "Xóa thành công",
+    "confirm_delete": "Bạn có chắc chắn muốn xóa mục này không?",
+    "something_went_wrong": "Đã có lỗi xảy ra. Vui lòng thử lại.",
+    "loading": "Đang tải..."
+}

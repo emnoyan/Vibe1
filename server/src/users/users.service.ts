@@ -49,7 +49,7 @@ export class UsersService {
       });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-        throw new ConflictException(I18nContext.current()?.t('USER_EMAIL_EXISTS'));
+        throw new ConflictException(I18nContext.current()?.t('users.email_exists'));
       }
       throw error;
     }
@@ -64,7 +64,6 @@ export class UsersService {
   }) {
     const { q, role, status, sortBy, sortOrder } = params || {};
 
-    // Normalize query
     const normalizedQ = q ? removeAccents(q) : undefined;
 
     const where: Prisma.UserWhereInput = {
@@ -110,21 +109,15 @@ export class UsersService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    // If password is provided but empty, remove it to prevent overwriting with empty string
     if (updateUserDto.password === '' || updateUserDto.password === undefined || updateUserDto.password === null) {
       delete updateUserDto.password;
     }
 
-    // If password is provided and not empty, hash it
     if (updateUserDto.password) {
       const salt = await bcrypt.genSalt();
       updateUserDto.password = await bcrypt.hash(updateUserDto.password, salt);
     }
 
-    // Update searchText if name or email is changing, or both
-    // However, updateDto is partial. We need current data to reconstruct full searchText IF we want to keep it sync.
-    // Or we can just fetch current user first?
-    // Optimization: If name or email is provided, fetch current, merge, update searchText.
     let searchText: string | undefined;
     if (updateUserDto.name !== undefined || updateUserDto.email !== undefined) {
       const currentUser = await this.prisma.user.findUnique({ where: { id } });
@@ -132,7 +125,6 @@ export class UsersService {
         const newName = updateUserDto.name !== undefined ? updateUserDto.name : currentUser.name;
         const newEmail = updateUserDto.email !== undefined ? updateUserDto.email : currentUser.email;
         searchText = removeAccents((newName || '') + ' ' + newEmail);
-        // Force update searchText
       }
     }
 
@@ -156,7 +148,7 @@ export class UsersService {
       });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-        throw new ConflictException(I18nContext.current()?.t('USER_EMAIL_EXISTS'));
+        throw new ConflictException(I18nContext.current()?.t('users.email_exists'));
       }
       throw error;
     }

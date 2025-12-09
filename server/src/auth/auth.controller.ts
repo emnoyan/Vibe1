@@ -17,7 +17,7 @@ export class AuthController {
     async login(@Body() signInDto: Record<string, any>) {
         const user = await this.authService.validateUser(signInDto.email, signInDto.password);
         if (!user) {
-            throw new UnauthorizedException(I18nContext.current()?.t('AUTH_INVALID_CREDENTIALS'));
+            throw new UnauthorizedException(I18nContext.current()?.t('auth.invalid_credentials'));
         }
         return this.authService.login(user);
     }

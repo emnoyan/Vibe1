@@ -62,11 +62,8 @@ let AuthService = AuthService_1 = class AuthService {
     async validateUser(email, pass) {
         const user = await this.usersService.findOneByEmail(email);
         const i18nContext = nestjs_i18n_1.I18nContext.current();
-        this.logger.log(`Validating user. Current Language: ${i18nContext?.lang}`);
         if (user && user.status === 'INACTIVE') {
-            const msg = i18nContext?.t('AUTH_ACCOUNT_INACTIVE');
-            this.logger.log(`Inactive account message (${i18nContext?.lang}): ${msg}`);
-            throw new common_1.UnauthorizedException(msg);
+            throw new common_1.UnauthorizedException(i18nContext?.t('auth.account_inactive'));
         }
         if (user && (await bcrypt.compare(pass, user.password))) {
             const { password, ...result } = user;
@@ -99,10 +96,10 @@ let AuthService = AuthService_1 = class AuthService {
     async refreshTokens(userId, rt) {
         const user = await this.usersService.findOne(userId);
         if (!user || !user.hashedRefreshToken)
-            throw new common_1.ForbiddenException(nestjs_i18n_1.I18nContext.current()?.t('AUTH_ACCESS_DENIED'));
+            throw new common_1.ForbiddenException(nestjs_i18n_1.I18nContext.current()?.t('auth.access_denied'));
         const rtMatches = await bcrypt.compare(rt, user.hashedRefreshToken);
         if (!rtMatches)
-            throw new common_1.ForbiddenException(nestjs_i18n_1.I18nContext.current()?.t('AUTH_ACCESS_DENIED'));
+            throw new common_1.ForbiddenException(nestjs_i18n_1.I18nContext.current()?.t('auth.access_denied'));
         const tokens = await this.getTokens(user.id, user.email, user.role, user.managedCategories);
         await this.updateRefreshToken(user.id, tokens.refresh_token);
         return tokens;

@@ -29,7 +29,7 @@ let AuthController = class AuthController {
     async login(signInDto) {
         const user = await this.authService.validateUser(signInDto.email, signInDto.password);
         if (!user) {
-            throw new common_1.UnauthorizedException(nestjs_i18n_1.I18nContext.current()?.t('AUTH_INVALID_CREDENTIALS'));
+            throw new common_1.UnauthorizedException(nestjs_i18n_1.I18nContext.current()?.t('auth.invalid_credentials'));
         }
         return this.authService.login(user);
     }

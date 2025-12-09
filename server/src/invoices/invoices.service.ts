@@ -28,20 +28,17 @@ export class InvoicesService {
     async create(data: CreateInvoiceDto) {
         const { items, ...invoiceData } = data;
 
-        // Auto-generate invoice number based on passed date or today
         const date = invoiceData.invoiceDate ? new Date(invoiceData.invoiceDate) : new Date();
         const yyyy = date.getFullYear();
         const mm = String(date.getMonth() + 1).padStart(2, '0');
         const dd = String(date.getDate()).padStart(2, '0');
         const todayPrefix = `${yyyy}${mm}${dd}`;
 
-        // Ensure invoiceDate is a Date object if provided (Prisma expects DateTime/Date or ISO string)
         if (invoiceData.invoiceDate) {
-            // @ts-ignore - Repurposing the property potentially, or just ensuring it's ISO
+            // @ts-ignore 
             invoiceData.invoiceDate = new Date(invoiceData.invoiceDate);
         }
 
-        // Find last invoice of today (or the selected date)
         const lastInvoice = await this.prisma.invoice.findFirst({
             where: {
                 invoiceNumber: {
@@ -111,7 +108,6 @@ export class InvoicesService {
     }
 
     async update(id: number, data: UpdateInvoiceDto) {
-        // Ensure invoiceDate is a Date object if provided
         if (data.invoiceDate) {
             // @ts-ignore
             data.invoiceDate = new Date(data.invoiceDate);
@@ -161,7 +157,7 @@ export class InvoicesService {
         }
 
         if (invoice && invoice.status === 'PAID') {
-            throw new BadRequestException(I18nContext.current()?.t('INVOICE_DELETE_PAID_ERROR'));
+            throw new BadRequestException(I18nContext.current()?.t('invoices.delete_paid_error'));
         }
 
         const result = await this.prisma.invoice.delete({

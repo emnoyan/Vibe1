@@ -139,7 +139,7 @@ let InvoicesService = class InvoicesService {
         if (!invoice) {
         }
         if (invoice && invoice.status === 'PAID') {
-            throw new common_1.BadRequestException(nestjs_i18n_1.I18nContext.current()?.t('INVOICE_DELETE_PAID_ERROR'));
+            throw new common_1.BadRequestException(nestjs_i18n_1.I18nContext.current()?.t('invoices.delete_paid_error'));
         }
         const result = await this.prisma.invoice.delete({
             where: { id },

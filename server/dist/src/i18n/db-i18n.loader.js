@@ -40,7 +40,20 @@ let DbI18nLoader = DbI18nLoader_1 = class DbI18nLoader {
                 if (!i18nTranslations[t.locale]) {
                     i18nTranslations[t.locale] = {};
                 }
-                i18nTranslations[t.locale][t.key] = t.value;
+                const keys = t.key.split('.');
+                let current = i18nTranslations[t.locale];
+                for (let i = 0; i < keys.length; i++) {
+                    const key = keys[i];
+                    if (i === keys.length - 1) {
+                        current[key] = t.value;
+                    }
+                    else {
+                        if (!current[key]) {
+                            current[key] = {};
+                        }
+                        current = current[key];
+                    }
+                }
             }
             return i18nTranslations;
         }

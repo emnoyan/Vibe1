@@ -18,12 +18,9 @@ export class AuthService {
     async validateUser(email: string, pass: string): Promise<any> {
         const user = await this.usersService.findOneByEmail(email);
         const i18nContext = I18nContext.current();
-        this.logger.log(`Validating user. Current Language: ${i18nContext?.lang}`);
 
         if (user && user.status === 'INACTIVE') {
-            const msg = i18nContext?.t('AUTH_ACCOUNT_INACTIVE');
-            this.logger.log(`Inactive account message (${i18nContext?.lang}): ${msg}`);
-            throw new UnauthorizedException(msg);
+            throw new UnauthorizedException(i18nContext?.t('auth.account_inactive'));
         }
 
         if (user && (await bcrypt.compare(pass, user.password))) {
@@ -61,10 +58,10 @@ export class AuthService {
 
     async refreshTokens(userId: number, rt: string) {
         const user = await this.usersService.findOne(userId);
-        if (!user || !user.hashedRefreshToken) throw new ForbiddenException(I18nContext.current()?.t('AUTH_ACCESS_DENIED'));
+        if (!user || !user.hashedRefreshToken) throw new ForbiddenException(I18nContext.current()?.t('auth.access_denied'));
 
         const rtMatches = await bcrypt.compare(rt, user.hashedRefreshToken);
-        if (!rtMatches) throw new ForbiddenException(I18nContext.current()?.t('AUTH_ACCESS_DENIED'));
+        if (!rtMatches) throw new ForbiddenException(I18nContext.current()?.t('auth.access_denied'));
 
         const tokens = await this.getTokens(user.id, user.email, user.role, user.managedCategories);
         await this.updateRefreshToken(user.id, tokens.refresh_token);

@@ -183,8 +183,8 @@ async function handleDelete(id: number) {
             </div>
           </div>
           <div class="bg-gray-50 px-4 py-3 sm:px-6 shrink-0 border-t border-gray-100 sm:grid sm:grid-flow-row-dense sm:grid-cols-2 sm:gap-3">
-              <button @click="handleSubmit" type="button" class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:col-start-2">Save</button>
-              <button @click="isModalOpen = false" type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0">Cancel</button>
+              <button @click="handleSubmit" type="button" class="inline-flex w-full justify-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 sm:col-start-2">{{ $t('button.save') }}</button>
+              <button @click="isModalOpen = false" type="button" class="mt-3 inline-flex w-full justify-center rounded-md bg-white px-3 py-2 text-sm font-semibold text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 hover:bg-gray-50 sm:col-start-1 sm:mt-0">{{ $t('button.cancel') }}</button>
           </div>
         </div>
       </div>

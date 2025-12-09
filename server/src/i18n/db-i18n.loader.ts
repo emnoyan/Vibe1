@@ -1,7 +1,6 @@
 import { I18nLoader, I18nTranslation } from 'nestjs-i18n';
 import { Injectable, Logger } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service.js';
-import { Prisma } from 'generated/prisma/client';
 
 @Injectable()
 export class DbI18nLoader implements I18nLoader {
@@ -32,7 +31,22 @@ export class DbI18nLoader implements I18nLoader {
                 if (!i18nTranslations[t.locale]) {
                     i18nTranslations[t.locale] = {};
                 }
-                i18nTranslations[t.locale][t.key] = t.value;
+
+                // Handle nesting: "auth.login" -> { auth: { login: "..." } }
+                const keys = t.key.split('.');
+                let current = i18nTranslations[t.locale];
+
+                for (let i = 0; i < keys.length; i++) {
+                    const key = keys[i];
+                    if (i === keys.length - 1) {
+                        current[key] = t.value;
+                    } else {
+                        if (!current[key]) {
+                            current[key] = {};
+                        }
+                        current = current[key] as any;
+                    }
+                }
             }
 
             return i18nTranslations;

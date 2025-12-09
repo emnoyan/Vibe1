@@ -1,0 +1,12 @@
+{
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Information",
+    "saved_successfully": "Saved successfully",
+    "updated_successfully": "Updated successfully",
+    "deleted_successfully": "Deleted successfully",
+    "confirm_delete": "Are you sure you want to delete this item?",
+    "something_went_wrong": "Something went wrong. Please try again.",
+    "loading": "Loading..."
+}

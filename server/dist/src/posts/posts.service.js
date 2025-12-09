@@ -86,10 +86,10 @@ let PostsService = class PostsService {
     async update(id, updatePostDto, user) {
         const post = await this.findOne(id);
         if (!post)
-            throw new common_1.NotFoundException(nestjs_i18n_1.I18nContext.current()?.t('POST_NOT_FOUND'));
+            throw new common_1.NotFoundException(nestjs_i18n_1.I18nContext.current()?.t('posts.not_found'));
         const ability = this.abilityFactory.createForUser(user);
         if (!ability.can(casl_ability_factory_js_1.Action.Update, (0, ability_1.subject)('Post', post))) {
-            throw new common_1.ForbiddenException(nestjs_i18n_1.I18nContext.current()?.t('POST_UPDATE_FORBIDDEN'));
+            throw new common_1.ForbiddenException(nestjs_i18n_1.I18nContext.current()?.t('posts.update_forbidden'));
         }
         const searchText = (0, string_utils_js_1.removeAccents)((updatePostDto.title !== undefined ? updatePostDto.title : post.title) + ' ' +
             (updatePostDto.content !== undefined ? updatePostDto.content : (post.content || '')));
@@ -104,10 +104,10 @@ let PostsService = class PostsService {
     async remove(id, user) {
         const post = await this.findOne(id);
         if (!post)
-            throw new common_1.NotFoundException(nestjs_i18n_1.I18nContext.current()?.t('POST_NOT_FOUND'));
+            throw new common_1.NotFoundException(nestjs_i18n_1.I18nContext.current()?.t('posts.not_found'));
         const ability = this.abilityFactory.createForUser(user);
         if (!ability.can(casl_ability_factory_js_1.Action.Delete, (0, ability_1.subject)('Post', post))) {
-            throw new common_1.ForbiddenException(nestjs_i18n_1.I18nContext.current()?.t('POST_DELETE_FORBIDDEN'));
+            throw new common_1.ForbiddenException(nestjs_i18n_1.I18nContext.current()?.t('posts.delete_forbidden'));
         }
         return this.prisma.post.delete({
             where: { id },

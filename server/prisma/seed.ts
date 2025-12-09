@@ -155,36 +155,63 @@ async function main() {
     // Translations
     console.log('Seeding translations...');
     const translations = [
-        { key: 'HELLO', locale: 'en', value: 'Hello' },
-        { key: 'HELLO', locale: 'vi', value: 'Xin chào' },
-        { key: 'WELCOME', locale: 'en', value: 'Welcome to VibeCode' },
-        { key: 'WELCOME', locale: 'vi', value: 'Chào mừng đến với VibeCode' },
-        { key: 'LOGIN', locale: 'en', value: 'Login' },
-        { key: 'LOGIN', locale: 'vi', value: 'Đăng nhập' },
-        { key: 'USER_NOT_FOUND', locale: 'en', value: 'User not found' },
-        { key: 'USER_NOT_FOUND', locale: 'vi', value: 'Người dùng không tồn tại' },
-        { key: 'FORBIDDEN', locale: 'en', value: 'Access denied' },
-        { key: 'FORBIDDEN', locale: 'vi', value: 'Truy cập bị từ chối' },
+        { key: 'common.hello', locale: 'en', value: 'Hello' },
+        { key: 'common.hello', locale: 'vi', value: 'Xin chào' },
+        { key: 'common.welcome', locale: 'en', value: 'Welcome to VibeCode' },
+        { key: 'common.welcome', locale: 'vi', value: 'Chào mừng đến với VibeCode' },
+        { key: 'common.login', locale: 'en', value: 'Login' },
+        { key: 'common.login', locale: 'vi', value: 'Đăng nhập' },
+
+        { key: 'users.not_found', locale: 'en', value: 'User not found' },
+        { key: 'users.not_found', locale: 'vi', value: 'Người dùng không tồn tại' },
+        { key: 'common.forbidden', locale: 'en', value: 'Access denied' },
+        { key: 'common.forbidden', locale: 'vi', value: 'Truy cập bị từ chối' },
+
         // Auth
-        { key: 'AUTH_ACCOUNT_INACTIVE', locale: 'en', value: 'Your account is inactive. Please contact administrator.' },
-        { key: 'AUTH_ACCOUNT_INACTIVE', locale: 'vi', value: 'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.' },
-        { key: 'AUTH_ACCESS_DENIED', locale: 'en', value: 'Access Denied' },
-        { key: 'AUTH_ACCESS_DENIED', locale: 'vi', value: 'Truy cập bị từ chối' },
-        { key: 'AUTH_INVALID_CREDENTIALS', locale: 'en', value: 'Invalid credentials' },
-        { key: 'AUTH_INVALID_CREDENTIALS', locale: 'vi', value: 'Thông tin đăng nhập không chính xác' },
+        { key: 'auth.account_inactive', locale: 'en', value: 'Your account is inactive. Please contact administrator.' },
+        { key: 'auth.account_inactive', locale: 'vi', value: 'Tài khoản của bạn đã bị khóa. Vui lòng liên hệ quản trị viên.' },
+        { key: 'auth.access_denied', locale: 'en', value: 'Access Denied' },
+        { key: 'auth.access_denied', locale: 'vi', value: 'Truy cập bị từ chối' },
+        { key: 'auth.invalid_credentials', locale: 'en', value: 'Invalid credentials' },
+        { key: 'auth.invalid_credentials', locale: 'vi', value: 'Thông tin đăng nhập không chính xác' },
+
         // Users
-        { key: 'USER_EMAIL_EXISTS', locale: 'en', value: 'Email already exists' },
-        { key: 'USER_EMAIL_EXISTS', locale: 'vi', value: 'Email đã tồn tại' },
+        { key: 'users.email_exists', locale: 'en', value: 'Email already exists' },
+        { key: 'users.email_exists', locale: 'vi', value: 'Email đã tồn tại' },
+
         // Posts
-        { key: 'POST_NOT_FOUND', locale: 'en', value: 'Post not found' },
-        { key: 'POST_NOT_FOUND', locale: 'vi', value: 'Bài viết không tìm thấy' },
-        { key: 'POST_UPDATE_FORBIDDEN', locale: 'en', value: 'You do not have permission to update this post' },
-        { key: 'POST_UPDATE_FORBIDDEN', locale: 'vi', value: 'Bạn không có quyền chỉnh sửa bài viết này' },
-        { key: 'POST_DELETE_FORBIDDEN', locale: 'en', value: 'You do not have permission to delete this post' },
-        { key: 'POST_DELETE_FORBIDDEN', locale: 'vi', value: 'Bạn không có quyền xóa bài viết này' },
+        { key: 'posts.not_found', locale: 'en', value: 'Post not found' },
+        { key: 'posts.not_found', locale: 'vi', value: 'Bài viết không tìm thấy' },
+        { key: 'posts.update_forbidden', locale: 'en', value: 'You do not have permission to update this post' },
+        { key: 'posts.update_forbidden', locale: 'vi', value: 'Bạn không có quyền chỉnh sửa bài viết này' },
+        { key: 'posts.delete_forbidden', locale: 'en', value: 'You do not have permission to delete this post' },
+        { key: 'posts.delete_forbidden', locale: 'vi', value: 'Bạn không có quyền xóa bài viết này' },
+
         // Invoices
-        { key: 'INVOICE_DELETE_PAID_ERROR', locale: 'en', value: 'Cannot delete an invoice with status PAID' },
-        { key: 'INVOICE_DELETE_PAID_ERROR', locale: 'vi', value: 'Không thể xóa hóa đơn đã thanh toán' },
+        { key: 'invoices.delete_paid_error', locale: 'en', value: 'Cannot delete an invoice with status PAID' },
+        { key: 'invoices.delete_paid_error', locale: 'vi', value: 'Không thể xóa hóa đơn đã thanh toán' },
+
+        // Validation
+        { key: 'validation.required', locale: 'en', value: 'This field is required' },
+        { key: 'validation.required', locale: 'vi', value: 'Trường này là bắt buộc' },
+        { key: 'validation.email', locale: 'en', value: 'Please enter a valid email address' },
+        { key: 'validation.email', locale: 'vi', value: 'Vui lòng nhập địa chỉ email hợp lệ' },
+        { key: 'validation.min', locale: 'en', value: 'Must be at least {min} characters' },
+        { key: 'validation.min', locale: 'vi', value: 'Phải có ít nhất {min} ký tự' },
+
+        // Buttons
+        { key: 'button.save', locale: 'en', value: 'Save' },
+        { key: 'button.save', locale: 'vi', value: 'Lưu' },
+        { key: 'button.cancel', locale: 'en', value: 'Cancel' },
+        { key: 'button.cancel', locale: 'vi', value: 'Hủy' },
+        { key: 'button.delete', locale: 'en', value: 'Delete' },
+        { key: 'button.delete', locale: 'vi', value: 'Xóa' },
+
+        // Messages
+        { key: 'message.success', locale: 'en', value: 'Success' },
+        { key: 'message.success', locale: 'vi', value: 'Thành công' },
+        { key: 'message.error', locale: 'en', value: 'Error' },
+        { key: 'message.error', locale: 'vi', value: 'Lỗi' },
     ];
 
     for (const t of translations) {
