@@ -12,10 +12,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.InvoicesService = void 0;
 const common_1 = require("@nestjs/common");
 const prisma_service_1 = require("../prisma/prisma.service");
+const nestjs_i18n_1 = require("nestjs-i18n");
 let InvoicesService = class InvoicesService {
     prisma;
-    constructor(prisma) {
+    i18n;
+    constructor(prisma, i18n) {
         this.prisma = prisma;
+        this.i18n = i18n;
     }
     transform(invoice) {
         if (!invoice)
@@ -136,7 +139,7 @@ let InvoicesService = class InvoicesService {
         if (!invoice) {
         }
         if (invoice && invoice.status === 'PAID') {
-            throw new common_1.BadRequestException('Cannot delete an invoice with status PAID');
+            throw new common_1.BadRequestException(nestjs_i18n_1.I18nContext.current()?.t('INVOICE_DELETE_PAID_ERROR'));
         }
         const result = await this.prisma.invoice.delete({
             where: { id },
@@ -148,6 +151,7 @@ let InvoicesService = class InvoicesService {
 exports.InvoicesService = InvoicesService;
 exports.InvoicesService = InvoicesService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_1.PrismaService,
+        nestjs_i18n_1.I18nService])
 ], InvoicesService);
 //# sourceMappingURL=invoices.service.js.map

@@ -18,6 +18,7 @@ const auth_service_js_1 = require("./auth.service.js");
 const create_user_dto_js_1 = require("../users/dto/create-user.dto.js");
 const jwt_auth_guard_js_1 = require("./jwt-auth.guard.js");
 const jwt_1 = require("@nestjs/jwt");
+const nestjs_i18n_1 = require("nestjs-i18n");
 let AuthController = class AuthController {
     authService;
     jwtService;
@@ -28,7 +29,7 @@ let AuthController = class AuthController {
     async login(signInDto) {
         const user = await this.authService.validateUser(signInDto.email, signInDto.password);
         if (!user) {
-            throw new common_1.UnauthorizedException('Invalid credentials');
+            throw new common_1.UnauthorizedException(nestjs_i18n_1.I18nContext.current()?.t('AUTH_INVALID_CREDENTIALS'));
         }
         return this.authService.login(user);
     }

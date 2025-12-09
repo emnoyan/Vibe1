@@ -29,11 +29,13 @@ export type AggregatePost = {
 export type PostAvgAggregateOutputType = {
   id: number | null
   authorId: number | null
+  categoryId: number | null
 }
 
 export type PostSumAggregateOutputType = {
   id: number | null
   authorId: number | null
+  categoryId: number | null
 }
 
 export type PostMinAggregateOutputType = {
@@ -42,7 +44,11 @@ export type PostMinAggregateOutputType = {
   updatedAt: Date | null
   published: boolean | null
   title: string | null
+  content: string | null
+  image: string | null
   authorId: number | null
+  categoryId: number | null
+  searchText: string | null
 }
 
 export type PostMaxAggregateOutputType = {
@@ -51,7 +57,11 @@ export type PostMaxAggregateOutputType = {
   updatedAt: Date | null
   published: boolean | null
   title: string | null
+  content: string | null
+  image: string | null
   authorId: number | null
+  categoryId: number | null
+  searchText: string | null
 }
 
 export type PostCountAggregateOutputType = {
@@ -60,7 +70,11 @@ export type PostCountAggregateOutputType = {
   updatedAt: number
   published: number
   title: number
+  content: number
+  image: number
   authorId: number
+  categoryId: number
+  searchText: number
   _all: number
 }
 
@@ -68,11 +82,13 @@ export type PostCountAggregateOutputType = {
 export type PostAvgAggregateInputType = {
   id?: true
   authorId?: true
+  categoryId?: true
 }
 
 export type PostSumAggregateInputType = {
   id?: true
   authorId?: true
+  categoryId?: true
 }
 
 export type PostMinAggregateInputType = {
@@ -81,7 +97,11 @@ export type PostMinAggregateInputType = {
   updatedAt?: true
   published?: true
   title?: true
+  content?: true
+  image?: true
   authorId?: true
+  categoryId?: true
+  searchText?: true
 }
 
 export type PostMaxAggregateInputType = {
@@ -90,7 +110,11 @@ export type PostMaxAggregateInputType = {
   updatedAt?: true
   published?: true
   title?: true
+  content?: true
+  image?: true
   authorId?: true
+  categoryId?: true
+  searchText?: true
 }
 
 export type PostCountAggregateInputType = {
@@ -99,7 +123,11 @@ export type PostCountAggregateInputType = {
   updatedAt?: true
   published?: true
   title?: true
+  content?: true
+  image?: true
   authorId?: true
+  categoryId?: true
+  searchText?: true
   _all?: true
 }
 
@@ -195,7 +223,11 @@ export type PostGroupByOutputType = {
   updatedAt: Date
   published: boolean
   title: string
+  content: string | null
+  image: string | null
   authorId: number | null
+  categoryId: number | null
+  searchText: string
   _count: PostCountAggregateOutputType | null
   _avg: PostAvgAggregateOutputType | null
   _sum: PostSumAggregateOutputType | null
@@ -227,8 +259,13 @@ export type PostWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Post"> | Date | string
   published?: Prisma.BoolFilter<"Post"> | boolean
   title?: Prisma.StringFilter<"Post"> | string
+  content?: Prisma.StringNullableFilter<"Post"> | string | null
+  image?: Prisma.StringNullableFilter<"Post"> | string | null
   authorId?: Prisma.IntNullableFilter<"Post"> | number | null
+  categoryId?: Prisma.IntNullableFilter<"Post"> | number | null
+  searchText?: Prisma.StringFilter<"Post"> | string
   author?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  category?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null
 }
 
 export type PostOrderByWithRelationInput = {
@@ -237,8 +274,13 @@ export type PostOrderByWithRelationInput = {
   updatedAt?: Prisma.SortOrder
   published?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  content?: Prisma.SortOrderInput | Prisma.SortOrder
+  image?: Prisma.SortOrderInput | Prisma.SortOrder
   authorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  searchText?: Prisma.SortOrder
   author?: Prisma.UserOrderByWithRelationInput
+  category?: Prisma.CategoryOrderByWithRelationInput
 }
 
 export type PostWhereUniqueInput = Prisma.AtLeast<{
@@ -250,8 +292,13 @@ export type PostWhereUniqueInput = Prisma.AtLeast<{
   updatedAt?: Prisma.DateTimeFilter<"Post"> | Date | string
   published?: Prisma.BoolFilter<"Post"> | boolean
   title?: Prisma.StringFilter<"Post"> | string
+  content?: Prisma.StringNullableFilter<"Post"> | string | null
+  image?: Prisma.StringNullableFilter<"Post"> | string | null
   authorId?: Prisma.IntNullableFilter<"Post"> | number | null
+  categoryId?: Prisma.IntNullableFilter<"Post"> | number | null
+  searchText?: Prisma.StringFilter<"Post"> | string
   author?: Prisma.XOR<Prisma.UserNullableScalarRelationFilter, Prisma.UserWhereInput> | null
+  category?: Prisma.XOR<Prisma.CategoryNullableScalarRelationFilter, Prisma.CategoryWhereInput> | null
 }, "id">
 
 export type PostOrderByWithAggregationInput = {
@@ -260,7 +307,11 @@ export type PostOrderByWithAggregationInput = {
   updatedAt?: Prisma.SortOrder
   published?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  content?: Prisma.SortOrderInput | Prisma.SortOrder
+  image?: Prisma.SortOrderInput | Prisma.SortOrder
   authorId?: Prisma.SortOrderInput | Prisma.SortOrder
+  categoryId?: Prisma.SortOrderInput | Prisma.SortOrder
+  searchText?: Prisma.SortOrder
   _count?: Prisma.PostCountOrderByAggregateInput
   _avg?: Prisma.PostAvgOrderByAggregateInput
   _max?: Prisma.PostMaxOrderByAggregateInput
@@ -277,7 +328,11 @@ export type PostScalarWhereWithAggregatesInput = {
   updatedAt?: Prisma.DateTimeWithAggregatesFilter<"Post"> | Date | string
   published?: Prisma.BoolWithAggregatesFilter<"Post"> | boolean
   title?: Prisma.StringWithAggregatesFilter<"Post"> | string
+  content?: Prisma.StringNullableWithAggregatesFilter<"Post"> | string | null
+  image?: Prisma.StringNullableWithAggregatesFilter<"Post"> | string | null
   authorId?: Prisma.IntNullableWithAggregatesFilter<"Post"> | number | null
+  categoryId?: Prisma.IntNullableWithAggregatesFilter<"Post"> | number | null
+  searchText?: Prisma.StringWithAggregatesFilter<"Post"> | string
 }
 
 export type PostCreateInput = {
@@ -285,7 +340,11 @@ export type PostCreateInput = {
   updatedAt?: Date | string
   published?: boolean
   title: string
+  content?: string | null
+  image?: string | null
+  searchText?: string
   author?: Prisma.UserCreateNestedOneWithoutPostsInput
+  category?: Prisma.CategoryCreateNestedOneWithoutPostsInput
 }
 
 export type PostUncheckedCreateInput = {
@@ -294,7 +353,11 @@ export type PostUncheckedCreateInput = {
   updatedAt?: Date | string
   published?: boolean
   title: string
+  content?: string | null
+  image?: string | null
   authorId?: number | null
+  categoryId?: number | null
+  searchText?: string
 }
 
 export type PostUpdateInput = {
@@ -302,7 +365,11 @@ export type PostUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  searchText?: Prisma.StringFieldUpdateOperationsInput | string
   author?: Prisma.UserUpdateOneWithoutPostsNestedInput
+  category?: Prisma.CategoryUpdateOneWithoutPostsNestedInput
 }
 
 export type PostUncheckedUpdateInput = {
@@ -311,7 +378,11 @@ export type PostUncheckedUpdateInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  categoryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  searchText?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type PostCreateManyInput = {
@@ -320,7 +391,11 @@ export type PostCreateManyInput = {
   updatedAt?: Date | string
   published?: boolean
   title: string
+  content?: string | null
+  image?: string | null
   authorId?: number | null
+  categoryId?: number | null
+  searchText?: string
 }
 
 export type PostUpdateManyMutationInput = {
@@ -328,6 +403,9 @@ export type PostUpdateManyMutationInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  searchText?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type PostUncheckedUpdateManyInput = {
@@ -336,7 +414,11 @@ export type PostUncheckedUpdateManyInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   authorId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  categoryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  searchText?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type PostListRelationFilter = {
@@ -355,12 +437,17 @@ export type PostCountOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   published?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  content?: Prisma.SortOrder
+  image?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
+  searchText?: Prisma.SortOrder
 }
 
 export type PostAvgOrderByAggregateInput = {
   id?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
 }
 
 export type PostMaxOrderByAggregateInput = {
@@ -369,7 +456,11 @@ export type PostMaxOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   published?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  content?: Prisma.SortOrder
+  image?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
+  searchText?: Prisma.SortOrder
 }
 
 export type PostMinOrderByAggregateInput = {
@@ -378,12 +469,17 @@ export type PostMinOrderByAggregateInput = {
   updatedAt?: Prisma.SortOrder
   published?: Prisma.SortOrder
   title?: Prisma.SortOrder
+  content?: Prisma.SortOrder
+  image?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
+  searchText?: Prisma.SortOrder
 }
 
 export type PostSumOrderByAggregateInput = {
   id?: Prisma.SortOrder
   authorId?: Prisma.SortOrder
+  categoryId?: Prisma.SortOrder
 }
 
 export type PostCreateNestedManyWithoutAuthorInput = {
@@ -440,11 +536,57 @@ export type NullableIntFieldUpdateOperationsInput = {
   divide?: number
 }
 
+export type PostCreateNestedManyWithoutCategoryInput = {
+  create?: Prisma.XOR<Prisma.PostCreateWithoutCategoryInput, Prisma.PostUncheckedCreateWithoutCategoryInput> | Prisma.PostCreateWithoutCategoryInput[] | Prisma.PostUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.PostCreateOrConnectWithoutCategoryInput | Prisma.PostCreateOrConnectWithoutCategoryInput[]
+  createMany?: Prisma.PostCreateManyCategoryInputEnvelope
+  connect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+}
+
+export type PostUncheckedCreateNestedManyWithoutCategoryInput = {
+  create?: Prisma.XOR<Prisma.PostCreateWithoutCategoryInput, Prisma.PostUncheckedCreateWithoutCategoryInput> | Prisma.PostCreateWithoutCategoryInput[] | Prisma.PostUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.PostCreateOrConnectWithoutCategoryInput | Prisma.PostCreateOrConnectWithoutCategoryInput[]
+  createMany?: Prisma.PostCreateManyCategoryInputEnvelope
+  connect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+}
+
+export type PostUpdateManyWithoutCategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.PostCreateWithoutCategoryInput, Prisma.PostUncheckedCreateWithoutCategoryInput> | Prisma.PostCreateWithoutCategoryInput[] | Prisma.PostUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.PostCreateOrConnectWithoutCategoryInput | Prisma.PostCreateOrConnectWithoutCategoryInput[]
+  upsert?: Prisma.PostUpsertWithWhereUniqueWithoutCategoryInput | Prisma.PostUpsertWithWhereUniqueWithoutCategoryInput[]
+  createMany?: Prisma.PostCreateManyCategoryInputEnvelope
+  set?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  disconnect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  delete?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  connect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  update?: Prisma.PostUpdateWithWhereUniqueWithoutCategoryInput | Prisma.PostUpdateWithWhereUniqueWithoutCategoryInput[]
+  updateMany?: Prisma.PostUpdateManyWithWhereWithoutCategoryInput | Prisma.PostUpdateManyWithWhereWithoutCategoryInput[]
+  deleteMany?: Prisma.PostScalarWhereInput | Prisma.PostScalarWhereInput[]
+}
+
+export type PostUncheckedUpdateManyWithoutCategoryNestedInput = {
+  create?: Prisma.XOR<Prisma.PostCreateWithoutCategoryInput, Prisma.PostUncheckedCreateWithoutCategoryInput> | Prisma.PostCreateWithoutCategoryInput[] | Prisma.PostUncheckedCreateWithoutCategoryInput[]
+  connectOrCreate?: Prisma.PostCreateOrConnectWithoutCategoryInput | Prisma.PostCreateOrConnectWithoutCategoryInput[]
+  upsert?: Prisma.PostUpsertWithWhereUniqueWithoutCategoryInput | Prisma.PostUpsertWithWhereUniqueWithoutCategoryInput[]
+  createMany?: Prisma.PostCreateManyCategoryInputEnvelope
+  set?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  disconnect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  delete?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  connect?: Prisma.PostWhereUniqueInput | Prisma.PostWhereUniqueInput[]
+  update?: Prisma.PostUpdateWithWhereUniqueWithoutCategoryInput | Prisma.PostUpdateWithWhereUniqueWithoutCategoryInput[]
+  updateMany?: Prisma.PostUpdateManyWithWhereWithoutCategoryInput | Prisma.PostUpdateManyWithWhereWithoutCategoryInput[]
+  deleteMany?: Prisma.PostScalarWhereInput | Prisma.PostScalarWhereInput[]
+}
+
 export type PostCreateWithoutAuthorInput = {
   createdAt?: Date | string
   updatedAt?: Date | string
   published?: boolean
   title: string
+  content?: string | null
+  image?: string | null
+  searchText?: string
+  category?: Prisma.CategoryCreateNestedOneWithoutPostsInput
 }
 
 export type PostUncheckedCreateWithoutAuthorInput = {
@@ -453,6 +595,10 @@ export type PostUncheckedCreateWithoutAuthorInput = {
   updatedAt?: Date | string
   published?: boolean
   title: string
+  content?: string | null
+  image?: string | null
+  categoryId?: number | null
+  searchText?: string
 }
 
 export type PostCreateOrConnectWithoutAuthorInput = {
@@ -490,7 +636,60 @@ export type PostScalarWhereInput = {
   updatedAt?: Prisma.DateTimeFilter<"Post"> | Date | string
   published?: Prisma.BoolFilter<"Post"> | boolean
   title?: Prisma.StringFilter<"Post"> | string
+  content?: Prisma.StringNullableFilter<"Post"> | string | null
+  image?: Prisma.StringNullableFilter<"Post"> | string | null
   authorId?: Prisma.IntNullableFilter<"Post"> | number | null
+  categoryId?: Prisma.IntNullableFilter<"Post"> | number | null
+  searchText?: Prisma.StringFilter<"Post"> | string
+}
+
+export type PostCreateWithoutCategoryInput = {
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  published?: boolean
+  title: string
+  content?: string | null
+  image?: string | null
+  searchText?: string
+  author?: Prisma.UserCreateNestedOneWithoutPostsInput
+}
+
+export type PostUncheckedCreateWithoutCategoryInput = {
+  id?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  published?: boolean
+  title: string
+  content?: string | null
+  image?: string | null
+  authorId?: number | null
+  searchText?: string
+}
+
+export type PostCreateOrConnectWithoutCategoryInput = {
+  where: Prisma.PostWhereUniqueInput
+  create: Prisma.XOR<Prisma.PostCreateWithoutCategoryInput, Prisma.PostUncheckedCreateWithoutCategoryInput>
+}
+
+export type PostCreateManyCategoryInputEnvelope = {
+  data: Prisma.PostCreateManyCategoryInput | Prisma.PostCreateManyCategoryInput[]
+  skipDuplicates?: boolean
+}
+
+export type PostUpsertWithWhereUniqueWithoutCategoryInput = {
+  where: Prisma.PostWhereUniqueInput
+  update: Prisma.XOR<Prisma.PostUpdateWithoutCategoryInput, Prisma.PostUncheckedUpdateWithoutCategoryInput>
+  create: Prisma.XOR<Prisma.PostCreateWithoutCategoryInput, Prisma.PostUncheckedCreateWithoutCategoryInput>
+}
+
+export type PostUpdateWithWhereUniqueWithoutCategoryInput = {
+  where: Prisma.PostWhereUniqueInput
+  data: Prisma.XOR<Prisma.PostUpdateWithoutCategoryInput, Prisma.PostUncheckedUpdateWithoutCategoryInput>
+}
+
+export type PostUpdateManyWithWhereWithoutCategoryInput = {
+  where: Prisma.PostScalarWhereInput
+  data: Prisma.XOR<Prisma.PostUpdateManyMutationInput, Prisma.PostUncheckedUpdateManyWithoutCategoryInput>
 }
 
 export type PostCreateManyAuthorInput = {
@@ -499,6 +698,10 @@ export type PostCreateManyAuthorInput = {
   updatedAt?: Date | string
   published?: boolean
   title: string
+  content?: string | null
+  image?: string | null
+  categoryId?: number | null
+  searchText?: string
 }
 
 export type PostUpdateWithoutAuthorInput = {
@@ -506,6 +709,10 @@ export type PostUpdateWithoutAuthorInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  searchText?: Prisma.StringFieldUpdateOperationsInput | string
+  category?: Prisma.CategoryUpdateOneWithoutPostsNestedInput
 }
 
 export type PostUncheckedUpdateWithoutAuthorInput = {
@@ -514,6 +721,10 @@ export type PostUncheckedUpdateWithoutAuthorInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  searchText?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 export type PostUncheckedUpdateManyWithoutAuthorInput = {
@@ -522,6 +733,57 @@ export type PostUncheckedUpdateManyWithoutAuthorInput = {
   updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
   published?: Prisma.BoolFieldUpdateOperationsInput | boolean
   title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  categoryId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  searchText?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type PostCreateManyCategoryInput = {
+  id?: number
+  createdAt?: Date | string
+  updatedAt?: Date | string
+  published?: boolean
+  title: string
+  content?: string | null
+  image?: string | null
+  authorId?: number | null
+  searchText?: string
+}
+
+export type PostUpdateWithoutCategoryInput = {
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  searchText?: Prisma.StringFieldUpdateOperationsInput | string
+  author?: Prisma.UserUpdateOneWithoutPostsNestedInput
+}
+
+export type PostUncheckedUpdateWithoutCategoryInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  searchText?: Prisma.StringFieldUpdateOperationsInput | string
+}
+
+export type PostUncheckedUpdateManyWithoutCategoryInput = {
+  id?: Prisma.IntFieldUpdateOperationsInput | number
+  createdAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  updatedAt?: Prisma.DateTimeFieldUpdateOperationsInput | Date | string
+  published?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  title?: Prisma.StringFieldUpdateOperationsInput | string
+  content?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  authorId?: Prisma.NullableIntFieldUpdateOperationsInput | number | null
+  searchText?: Prisma.StringFieldUpdateOperationsInput | string
 }
 
 
@@ -532,8 +794,13 @@ export type PostSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = r
   updatedAt?: boolean
   published?: boolean
   title?: boolean
+  content?: boolean
+  image?: boolean
   authorId?: boolean
+  categoryId?: boolean
+  searchText?: boolean
   author?: boolean | Prisma.Post$authorArgs<ExtArgs>
+  category?: boolean | Prisma.Post$categoryArgs<ExtArgs>
 }, ExtArgs["result"]["post"]>
 
 export type PostSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -542,8 +809,13 @@ export type PostSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   updatedAt?: boolean
   published?: boolean
   title?: boolean
+  content?: boolean
+  image?: boolean
   authorId?: boolean
+  categoryId?: boolean
+  searchText?: boolean
   author?: boolean | Prisma.Post$authorArgs<ExtArgs>
+  category?: boolean | Prisma.Post$categoryArgs<ExtArgs>
 }, ExtArgs["result"]["post"]>
 
 export type PostSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
@@ -552,8 +824,13 @@ export type PostSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensio
   updatedAt?: boolean
   published?: boolean
   title?: boolean
+  content?: boolean
+  image?: boolean
   authorId?: boolean
+  categoryId?: boolean
+  searchText?: boolean
   author?: boolean | Prisma.Post$authorArgs<ExtArgs>
+  category?: boolean | Prisma.Post$categoryArgs<ExtArgs>
 }, ExtArgs["result"]["post"]>
 
 export type PostSelectScalar = {
@@ -562,24 +839,32 @@ export type PostSelectScalar = {
   updatedAt?: boolean
   published?: boolean
   title?: boolean
+  content?: boolean
+  image?: boolean
   authorId?: boolean
+  categoryId?: boolean
+  searchText?: boolean
 }
 
-export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "published" | "title" | "authorId", ExtArgs["result"]["post"]>
+export type PostOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "createdAt" | "updatedAt" | "published" | "title" | "content" | "image" | "authorId" | "categoryId" | "searchText", ExtArgs["result"]["post"]>
 export type PostInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.Post$authorArgs<ExtArgs>
+  category?: boolean | Prisma.Post$categoryArgs<ExtArgs>
 }
 export type PostIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.Post$authorArgs<ExtArgs>
+  category?: boolean | Prisma.Post$categoryArgs<ExtArgs>
 }
 export type PostIncludeUpdateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   author?: boolean | Prisma.Post$authorArgs<ExtArgs>
+  category?: boolean | Prisma.Post$categoryArgs<ExtArgs>
 }
 
 export type $PostPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   name: "Post"
   objects: {
     author: Prisma.$UserPayload<ExtArgs> | null
+    category: Prisma.$CategoryPayload<ExtArgs> | null
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: number
@@ -587,7 +872,11 @@ export type $PostPayload<ExtArgs extends runtime.Types.Extensions.InternalArgs =
     updatedAt: Date
     published: boolean
     title: string
+    content: string | null
+    image: string | null
     authorId: number | null
+    categoryId: number | null
+    searchText: string
   }, ExtArgs["result"]["post"]>
   composites: {}
 }
@@ -983,6 +1272,7 @@ readonly fields: PostFieldRefs;
 export interface Prisma__PostClient<T, Null = never, ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
   readonly [Symbol.toStringTag]: "PrismaPromise"
   author<T extends Prisma.Post$authorArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Post$authorArgs<ExtArgs>>): Prisma.Prisma__UserClient<runtime.Types.Result.GetResult<Prisma.$UserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  category<T extends Prisma.Post$categoryArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.Post$categoryArgs<ExtArgs>>): Prisma.Prisma__CategoryClient<runtime.Types.Result.GetResult<Prisma.$CategoryPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1017,7 +1307,11 @@ export interface PostFieldRefs {
   readonly updatedAt: Prisma.FieldRef<"Post", 'DateTime'>
   readonly published: Prisma.FieldRef<"Post", 'Boolean'>
   readonly title: Prisma.FieldRef<"Post", 'String'>
+  readonly content: Prisma.FieldRef<"Post", 'String'>
+  readonly image: Prisma.FieldRef<"Post", 'String'>
   readonly authorId: Prisma.FieldRef<"Post", 'Int'>
+  readonly categoryId: Prisma.FieldRef<"Post", 'Int'>
+  readonly searchText: Prisma.FieldRef<"Post", 'String'>
 }
     
 
@@ -1430,6 +1724,25 @@ export type Post$authorArgs<ExtArgs extends runtime.Types.Extensions.InternalArg
    */
   include?: Prisma.UserInclude<ExtArgs> | null
   where?: Prisma.UserWhereInput
+}
+
+/**
+ * Post.category
+ */
+export type Post$categoryArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Category
+   */
+  select?: Prisma.CategorySelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Category
+   */
+  omit?: Prisma.CategoryOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.CategoryInclude<ExtArgs> | null
+  where?: Prisma.CategoryWhereInput
 }
 
 /**

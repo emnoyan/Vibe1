@@ -2,9 +2,11 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Prisma } from 'generated/prisma/client';
 import { CreateInvoiceDto } from './dto/create-invoice.dto';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
+import { I18nService } from 'nestjs-i18n';
 export declare class InvoicesService {
     private readonly prisma;
-    constructor(prisma: PrismaService);
+    private readonly i18n;
+    constructor(prisma: PrismaService, i18n: I18nService);
     private transform;
     create(data: CreateInvoiceDto): Promise<any>;
     findAll(params?: {

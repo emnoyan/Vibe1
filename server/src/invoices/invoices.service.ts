@@ -3,10 +3,14 @@ import { PrismaService } from '../prisma/prisma.service';
 import { Prisma } from 'generated/prisma/client';
 import { CreateInvoiceDto, CreateInvoiceItemDto } from './dto/create-invoice.dto';
 import { UpdateInvoiceDto } from './dto/update-invoice.dto';
+import { I18nService, I18nContext } from 'nestjs-i18n';
 
 @Injectable()
 export class InvoicesService {
-    constructor(private readonly prisma: PrismaService) { }
+    constructor(
+        private readonly prisma: PrismaService,
+        private readonly i18n: I18nService
+    ) { }
 
     private transform(invoice: any) {
         if (!invoice) return null;
@@ -132,6 +136,7 @@ export class InvoicesService {
                     items: {
                         deleteMany: {},
                         create: validItems,
+                        // @ts-ignore
                     }
                 },
                 include: { items: true },
@@ -153,15 +158,10 @@ export class InvoicesService {
         });
 
         if (!invoice) {
-            // Let the delete call handle not found or throw explicit NotFound
-            // But usually delete triggers an error if not found. 
-            // Better to let prisma throw or handle it.
-            // However, to check status we needed it.
-            // If it doesn't exist, we can't check status, but we also can't delete it.
         }
 
         if (invoice && invoice.status === 'PAID') {
-            throw new BadRequestException('Cannot delete an invoice with status PAID');
+            throw new BadRequestException(I18nContext.current()?.t('INVOICE_DELETE_PAID_ERROR'));
         }
 
         const result = await this.prisma.invoice.delete({

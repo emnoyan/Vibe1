@@ -6,12 +6,11 @@ export declare class UsersController {
     constructor(usersService: UsersService);
     create(createUserDto: CreateUserDto): Promise<{
         managedCategories: {
-            id: number;
             name: string;
+            id: number;
             slug: string;
         }[];
     } & {
-        id: number;
         email: string;
         password: string;
         name: string | null;
@@ -21,6 +20,7 @@ export declare class UsersController {
         hashedRefreshToken: string | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
     }>;
     findAll(q?: string, role?: 'ADMIN' | 'USER', status?: 'ACTIVE' | 'INACTIVE', sortBy?: string, sortOrder?: 'asc' | 'desc'): Promise<import("./entities/user.entity.js").UserEntity[]>;
     getStats(): Promise<{
@@ -33,12 +33,11 @@ export declare class UsersController {
     findOne(id: string): Promise<import("./entities/user.entity.js").UserEntity | null>;
     update(id: string, updateUserDto: UpdateUserDto): Promise<{
         managedCategories: {
-            id: number;
             name: string;
+            id: number;
             slug: string;
         }[];
     } & {
-        id: number;
         email: string;
         password: string;
         name: string | null;
@@ -48,9 +47,9 @@ export declare class UsersController {
         hashedRefreshToken: string | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
     }>;
     remove(id: string): import("../../generated/prisma/models.js").Prisma__UserClient<{
-        id: number;
         email: string;
         password: string;
         name: string | null;
@@ -60,6 +59,7 @@ export declare class UsersController {
         hashedRefreshToken: string | null;
         createdAt: Date;
         updatedAt: Date;
+        id: number;
     }, never, import("@prisma/client/runtime/client.js").DefaultArgs, {
         omit: import("../../generated/prisma/internal/prismaNamespace.js").GlobalOmitConfig | undefined;
     }>;

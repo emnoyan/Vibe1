@@ -41,23 +41,32 @@ var __importStar = (this && this.__importStar) || (function () {
 var __metadata = (this && this.__metadata) || function (k, v) {
     if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
 };
+var AuthService_1;
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.AuthService = void 0;
 const common_1 = require("@nestjs/common");
 const users_service_js_1 = require("../users/users.service.js");
 const jwt_1 = require("@nestjs/jwt");
 const bcrypt = __importStar(require("bcrypt"));
-let AuthService = class AuthService {
+const nestjs_i18n_1 = require("nestjs-i18n");
+let AuthService = AuthService_1 = class AuthService {
     usersService;
     jwtService;
-    constructor(usersService, jwtService) {
+    i18n;
+    logger = new common_1.Logger(AuthService_1.name);
+    constructor(usersService, jwtService, i18n) {
         this.usersService = usersService;
         this.jwtService = jwtService;
+        this.i18n = i18n;
     }
     async validateUser(email, pass) {
         const user = await this.usersService.findOneByEmail(email);
+        const i18nContext = nestjs_i18n_1.I18nContext.current();
+        this.logger.log(`Validating user. Current Language: ${i18nContext?.lang}`);
         if (user && user.status === 'INACTIVE') {
-            throw new common_1.UnauthorizedException('Your account is inactive. Please contact administrator.');
+            const msg = i18nContext?.t('AUTH_ACCOUNT_INACTIVE');
+            this.logger.log(`Inactive account message (${i18nContext?.lang}): ${msg}`);
+            throw new common_1.UnauthorizedException(msg);
         }
         if (user && (await bcrypt.compare(pass, user.password))) {
             const { password, ...result } = user;
@@ -90,10 +99,10 @@ let AuthService = class AuthService {
     async refreshTokens(userId, rt) {
         const user = await this.usersService.findOne(userId);
         if (!user || !user.hashedRefreshToken)
-            throw new common_1.ForbiddenException('Access Denied');
+            throw new common_1.ForbiddenException(nestjs_i18n_1.I18nContext.current()?.t('AUTH_ACCESS_DENIED'));
         const rtMatches = await bcrypt.compare(rt, user.hashedRefreshToken);
         if (!rtMatches)
-            throw new common_1.ForbiddenException('Access Denied');
+            throw new common_1.ForbiddenException(nestjs_i18n_1.I18nContext.current()?.t('AUTH_ACCESS_DENIED'));
         const tokens = await this.getTokens(user.id, user.email, user.role, user.managedCategories);
         await this.updateRefreshToken(user.id, tokens.refresh_token);
         return tokens;
@@ -116,9 +125,10 @@ let AuthService = class AuthService {
     }
 };
 exports.AuthService = AuthService;
-exports.AuthService = AuthService = __decorate([
+exports.AuthService = AuthService = AuthService_1 = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [users_service_js_1.UsersService,
-        jwt_1.JwtService])
+        jwt_1.JwtService,
+        nestjs_i18n_1.I18nService])
 ], AuthService);
 //# sourceMappingURL=auth.service.js.map

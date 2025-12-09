@@ -1,4 +1,5 @@
 import axios from 'axios';
+import i18n from '@/i18n';
 
 const instance = axios.create({
     baseURL: 'http://localhost:3000', // Server URL
@@ -13,6 +14,7 @@ instance.interceptors.request.use(
         if (token) {
             config.headers.Authorization = `Bearer ${token}`;
         }
+        config.headers['Accept-Language'] = i18n.global.locale.value;
         return config;
     },
     (error) => {

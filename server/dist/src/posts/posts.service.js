@@ -14,13 +14,16 @@ const common_1 = require("@nestjs/common");
 const prisma_service_js_1 = require("../prisma/prisma.service.js");
 const casl_ability_factory_js_1 = require("../casl/casl-ability.factory.js");
 const ability_1 = require("@casl/ability");
+const nestjs_i18n_1 = require("nestjs-i18n");
 const string_utils_js_1 = require("../common/utils/string.utils.js");
 let PostsService = class PostsService {
     prisma;
     abilityFactory;
-    constructor(prisma, abilityFactory) {
+    i18n;
+    constructor(prisma, abilityFactory, i18n) {
         this.prisma = prisma;
         this.abilityFactory = abilityFactory;
+        this.i18n = i18n;
     }
     async onModuleInit() {
         const posts = await this.prisma.post.findMany({
@@ -83,10 +86,10 @@ let PostsService = class PostsService {
     async update(id, updatePostDto, user) {
         const post = await this.findOne(id);
         if (!post)
-            throw new common_1.NotFoundException('Post not found');
+            throw new common_1.NotFoundException(nestjs_i18n_1.I18nContext.current()?.t('POST_NOT_FOUND'));
         const ability = this.abilityFactory.createForUser(user);
         if (!ability.can(casl_ability_factory_js_1.Action.Update, (0, ability_1.subject)('Post', post))) {
-            throw new common_1.ForbiddenException('You do not have permission to update this post');
+            throw new common_1.ForbiddenException(nestjs_i18n_1.I18nContext.current()?.t('POST_UPDATE_FORBIDDEN'));
         }
         const searchText = (0, string_utils_js_1.removeAccents)((updatePostDto.title !== undefined ? updatePostDto.title : post.title) + ' ' +
             (updatePostDto.content !== undefined ? updatePostDto.content : (post.content || '')));
@@ -101,10 +104,10 @@ let PostsService = class PostsService {
     async remove(id, user) {
         const post = await this.findOne(id);
         if (!post)
-            throw new common_1.NotFoundException('Post not found');
+            throw new common_1.NotFoundException(nestjs_i18n_1.I18nContext.current()?.t('POST_NOT_FOUND'));
         const ability = this.abilityFactory.createForUser(user);
         if (!ability.can(casl_ability_factory_js_1.Action.Delete, (0, ability_1.subject)('Post', post))) {
-            throw new common_1.ForbiddenException('You do not have permission to delete this post');
+            throw new common_1.ForbiddenException(nestjs_i18n_1.I18nContext.current()?.t('POST_DELETE_FORBIDDEN'));
         }
         return this.prisma.post.delete({
             where: { id },
@@ -115,6 +118,7 @@ exports.PostsService = PostsService;
 exports.PostsService = PostsService = __decorate([
     (0, common_1.Injectable)(),
     __metadata("design:paramtypes", [prisma_service_js_1.PrismaService,
-        casl_ability_factory_js_1.CaslAbilityFactory])
+        casl_ability_factory_js_1.CaslAbilityFactory,
+        nestjs_i18n_1.I18nService])
 ], PostsService);
 //# sourceMappingURL=posts.service.js.map

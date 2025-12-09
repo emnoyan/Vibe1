@@ -25,7 +25,7 @@ const handleLogout = () => {
             <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
           </svg>
         </button>
-        <h1 class="text-2xl font-bold tracking-tight text-gray-900">Dashboard</h1>
+        <h1 class="text-2xl font-bold tracking-tight text-gray-900">{{ $t('common.dashboard') }}</h1>
       </div>
       <div class="flex items-center gap-4">
         <span class="text-sm font-medium text-gray-500" v-if="authStore.user">
@@ -35,7 +35,7 @@ const handleLogout = () => {
           @click="handleLogout"
           class="rounded-md bg-gray-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-gray-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-gray-600"
         >
-          Logout
+          {{ $t('common.logout') }}
         </button>
       </div>
     </div>

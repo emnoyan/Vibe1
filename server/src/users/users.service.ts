@@ -6,10 +6,14 @@ import * as bcrypt from 'bcrypt';
 import { UserEntity } from './entities/user.entity.js';
 import { Prisma } from 'generated/prisma/client';
 import { removeAccents } from '../common/utils/string.utils.js';
+import { I18nService, I18nContext } from 'nestjs-i18n';
 
 @Injectable()
 export class UsersService {
-  constructor(private prisma: PrismaService) { }
+  constructor(
+    private prisma: PrismaService,
+    private readonly i18n: I18nService
+  ) { }
 
   async onModuleInit() {
     // Refresh searchText for all users to ensure new accent removal logic (e.g. Đ -> d) is applied
@@ -45,7 +49,7 @@ export class UsersService {
       });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-        throw new ConflictException('Email already exists');
+        throw new ConflictException(I18nContext.current()?.t('USER_EMAIL_EXISTS'));
       }
       throw error;
     }
@@ -128,6 +132,7 @@ export class UsersService {
         const newName = updateUserDto.name !== undefined ? updateUserDto.name : currentUser.name;
         const newEmail = updateUserDto.email !== undefined ? updateUserDto.email : currentUser.email;
         searchText = removeAccents((newName || '') + ' ' + newEmail);
+        // Force update searchText
       }
     }
 
@@ -151,7 +156,7 @@ export class UsersService {
       });
     } catch (error) {
       if (error instanceof Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-        throw new ConflictException('Email already exists');
+        throw new ConflictException(I18nContext.current()?.t('USER_EMAIL_EXISTS'));
       }
       throw error;
     }

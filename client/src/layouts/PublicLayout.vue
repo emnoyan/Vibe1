@@ -15,11 +15,11 @@ const authStore = useAuthStore();
           </div>
           <div class="flex items-center">
             <template v-if="authStore.isAuthenticated">
-               <router-link to="/admin/dashboard" class="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Dashboard</router-link>
+               <router-link to="/admin/dashboard" class="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">{{ $t('common.dashboard') }}</router-link>
             </template>
             <template v-else>
-               <router-link to="/login" class="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">Login</router-link>
-               <router-link to="/register" class="ml-4 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">Register</router-link>
+               <router-link to="/login" class="text-gray-500 hover:text-gray-900 px-3 py-2 rounded-md text-sm font-medium">{{ $t('common.login') }}</router-link>
+               <router-link to="/register" class="ml-4 px-4 py-2 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700">{{ $t('common.register') }}</router-link>
             </template>
           </div>
         </div>
@@ -30,7 +30,7 @@ const authStore = useAuthStore();
     </main>
     <footer class="bg-white mt-12 border-t border-gray-200">
       <div class="max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8">
-         <p class="text-center text-base text-gray-400">&copy; 2025 MyBlog. All rights reserved.</p>
+         <p class="text-center text-base text-gray-400">{{ $t('footer.copyright') }}</p>
       </div>
     </footer>
   </div>

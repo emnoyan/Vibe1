@@ -5,6 +5,7 @@ import { PrismaService } from '../prisma/prisma.service.js';
 import { Prisma } from 'generated/prisma/client';
 import { CaslAbilityFactory, Action } from '../casl/casl-ability.factory.js';
 import { subject } from '@casl/ability';
+import { I18nService, I18nContext } from 'nestjs-i18n';
 
 import { removeAccents } from '../common/utils/string.utils.js';
 
@@ -12,7 +13,8 @@ import { removeAccents } from '../common/utils/string.utils.js';
 export class PostsService {
   constructor(
     private prisma: PrismaService,
-    private abilityFactory: CaslAbilityFactory
+    private abilityFactory: CaslAbilityFactory,
+    private readonly i18n: I18nService
   ) { }
 
   async onModuleInit() {
@@ -94,11 +96,11 @@ export class PostsService {
 
   async update(id: number, updatePostDto: UpdatePostDto, user: any) {
     const post = await this.findOne(id);
-    if (!post) throw new NotFoundException('Post not found');
+    if (!post) throw new NotFoundException(I18nContext.current()?.t('POST_NOT_FOUND'));
 
     const ability = this.abilityFactory.createForUser(user);
     if (!ability.can(Action.Update, subject('Post', post))) {
-      throw new ForbiddenException('You do not have permission to update this post');
+      throw new ForbiddenException(I18nContext.current()?.t('POST_UPDATE_FORBIDDEN'));
     }
 
     const searchText = removeAccents(
@@ -117,11 +119,11 @@ export class PostsService {
 
   async remove(id: number, user: any) {
     const post = await this.findOne(id);
-    if (!post) throw new NotFoundException('Post not found');
+    if (!post) throw new NotFoundException(I18nContext.current()?.t('POST_NOT_FOUND'));
 
     const ability = this.abilityFactory.createForUser(user);
     if (!ability.can(Action.Delete, subject('Post', post))) {
-      throw new ForbiddenException('You do not have permission to delete this post');
+      throw new ForbiddenException(I18nContext.current()?.t('POST_DELETE_FORBIDDEN'));
     }
 
     return this.prisma.post.delete({

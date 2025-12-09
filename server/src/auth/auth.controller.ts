@@ -3,6 +3,7 @@ import { AuthService } from './auth.service.js';
 import { CreateUserDto } from '../users/dto/create-user.dto.js';
 import { JwtAuthGuard } from './jwt-auth.guard.js';
 import { JwtService } from '@nestjs/jwt';
+import { I18nContext } from 'nestjs-i18n';
 
 @Controller('auth')
 export class AuthController {
@@ -16,7 +17,7 @@ export class AuthController {
     async login(@Body() signInDto: Record<string, any>) {
         const user = await this.authService.validateUser(signInDto.email, signInDto.password);
         if (!user) {
-            throw new UnauthorizedException('Invalid credentials');
+            throw new UnauthorizedException(I18nContext.current()?.t('AUTH_INVALID_CREDENTIALS'));
         }
         return this.authService.login(user);
     }

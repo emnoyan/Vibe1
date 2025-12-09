@@ -52,7 +52,11 @@ export const AnyNull = runtime.AnyNull
 
 export const ModelName = {
   User: 'User',
-  Post: 'Post'
+  Post: 'Post',
+  Category: 'Category',
+  Invoice: 'Invoice',
+  InvoiceItem: 'InvoiceItem',
+  Translation: 'Translation'
 } as const
 
 export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -77,6 +81,9 @@ export const UserScalarFieldEnum = {
   password: 'password',
   name: 'name',
   role: 'role',
+  status: 'status',
+  searchText: 'searchText',
+  hashedRefreshToken: 'hashedRefreshToken',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 } as const
@@ -90,10 +97,62 @@ export const PostScalarFieldEnum = {
   updatedAt: 'updatedAt',
   published: 'published',
   title: 'title',
-  authorId: 'authorId'
+  content: 'content',
+  image: 'image',
+  authorId: 'authorId',
+  categoryId: 'categoryId',
+  searchText: 'searchText'
 } as const
 
 export type PostScalarFieldEnum = (typeof PostScalarFieldEnum)[keyof typeof PostScalarFieldEnum]
+
+
+export const CategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  slug: 'slug'
+} as const
+
+export type CategoryScalarFieldEnum = (typeof CategoryScalarFieldEnum)[keyof typeof CategoryScalarFieldEnum]
+
+
+export const InvoiceScalarFieldEnum = {
+  id: 'id',
+  customerName: 'customerName',
+  customerEmail: 'customerEmail',
+  status: 'status',
+  invoiceDate: 'invoiceDate',
+  invoiceNumber: 'invoiceNumber',
+  total: 'total',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type InvoiceScalarFieldEnum = (typeof InvoiceScalarFieldEnum)[keyof typeof InvoiceScalarFieldEnum]
+
+
+export const InvoiceItemScalarFieldEnum = {
+  id: 'id',
+  invoiceId: 'invoiceId',
+  description: 'description',
+  quantity: 'quantity',
+  price: 'price',
+  total: 'total'
+} as const
+
+export type InvoiceItemScalarFieldEnum = (typeof InvoiceItemScalarFieldEnum)[keyof typeof InvoiceItemScalarFieldEnum]
+
+
+export const TranslationScalarFieldEnum = {
+  id: 'id',
+  key: 'key',
+  locale: 'locale',
+  value: 'value',
+  createdAt: 'createdAt',
+  updatedAt: 'updatedAt'
+} as const
+
+export type TranslationScalarFieldEnum = (typeof TranslationScalarFieldEnum)[keyof typeof TranslationScalarFieldEnum]
 
 
 export const SortOrder = {

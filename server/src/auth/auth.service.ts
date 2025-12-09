@@ -1,21 +1,29 @@
-import { Injectable, UnauthorizedException, ForbiddenException } from '@nestjs/common';
+import { Injectable, UnauthorizedException, ForbiddenException, Logger } from '@nestjs/common';
 import { UsersService } from '../users/users.service.js';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
 import { CreateUserDto } from '../users/dto/create-user.dto.js';
+import { I18nService, I18nContext } from 'nestjs-i18n';
 
 @Injectable()
 export class AuthService {
+    private readonly logger = new Logger(AuthService.name);
+
     constructor(
         private usersService: UsersService,
-        private jwtService: JwtService
+        private jwtService: JwtService,
+        private readonly i18n: I18nService
     ) { }
 
     async validateUser(email: string, pass: string): Promise<any> {
         const user = await this.usersService.findOneByEmail(email);
+        const i18nContext = I18nContext.current();
+        this.logger.log(`Validating user. Current Language: ${i18nContext?.lang}`);
 
         if (user && user.status === 'INACTIVE') {
-            throw new UnauthorizedException('Your account is inactive. Please contact administrator.');
+            const msg = i18nContext?.t('AUTH_ACCOUNT_INACTIVE');
+            this.logger.log(`Inactive account message (${i18nContext?.lang}): ${msg}`);
+            throw new UnauthorizedException(msg);
         }
 
         if (user && (await bcrypt.compare(pass, user.password))) {
@@ -53,10 +61,10 @@ export class AuthService {
 
     async refreshTokens(userId: number, rt: string) {
         const user = await this.usersService.findOne(userId);
-        if (!user || !user.hashedRefreshToken) throw new ForbiddenException('Access Denied');
+        if (!user || !user.hashedRefreshToken) throw new ForbiddenException(I18nContext.current()?.t('AUTH_ACCESS_DENIED'));
 
         const rtMatches = await bcrypt.compare(rt, user.hashedRefreshToken);
-        if (!rtMatches) throw new ForbiddenException('Access Denied');
+        if (!rtMatches) throw new ForbiddenException(I18nContext.current()?.t('AUTH_ACCESS_DENIED'));
 
         const tokens = await this.getTokens(user.id, user.email, user.role, user.managedCategories);
         await this.updateRefreshToken(user.id, tokens.refresh_token);

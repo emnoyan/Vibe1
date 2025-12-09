@@ -2,20 +2,22 @@
 import { useRoute } from 'vue-router';
 import { useAuthStore } from '@/stores/auth';
 import { computed } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 const route = useRoute();
 const authStore = useAuthStore();
+const { t } = useI18n();
 
 const navigation = computed(() => {
   const nav = [
-    { name: 'Dashboard', href: '/admin/dashboard', icon: 'LayoutDashboard' },
-    { name: 'Posts', href: '/admin/posts', icon: 'DocumentText' },
+    { name: t('common.dashboard'), href: '/admin/dashboard', icon: 'LayoutDashboard' },
+    { name: t('menu.posts'), href: '/admin/posts', icon: 'DocumentText' },
   ];
 
   if (authStore.user?.role === 'ADMIN') {
-    nav.push({ name: 'Users', href: '/admin/users', icon: 'Users' });
-    nav.push({ name: 'Categories', href: '/admin/categories', icon: 'Folder' });
-    nav.push({ name: 'Invoices', href: '/admin/invoices', icon: 'DocumentDuplicate' });
+    nav.push({ name: t('common.users'), href: '/admin/users', icon: 'Users' });
+    nav.push({ name: t('menu.categories'), href: '/admin/categories', icon: 'Folder' });
+    nav.push({ name: t('menu.invoices'), href: '/admin/invoices', icon: 'DocumentDuplicate' });
   }
 
   return nav;

@@ -3,17 +3,30 @@ import { computed } from 'vue';
 import { useRoute } from 'vue-router';
 import AdminLayout from '@/layouts/AdminLayout.vue';
 import PublicLayout from '@/layouts/PublicLayout.vue';
+import LanguageSwitcher from '@/components/LanguageSwitcher.vue';
 
 const route = useRoute();
 const layout = computed(() => {
   if (route.meta.layout === 'AdminLayout') return AdminLayout;
   if (route.meta.layout === 'PublicLayout') return PublicLayout;
-  return PublicLayout; // Default to PublicLayout? Or 'div'. For Guest pages 'div' is fine? Guest pages usually need PublicLayout (Header).
+  return PublicLayout; 
 });
 </script>
 
 <template>
-  <component :is="layout">
-    <RouterView />
-  </component>
+  <div class="app-container">
+    <LanguageSwitcher class="fixed-switcher" />
+    <component :is="layout">
+      <RouterView />
+    </component>
+  </div>
 </template>
+
+<style scoped>
+.fixed-switcher {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 9999;
+}
+</style>

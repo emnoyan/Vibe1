@@ -49,10 +49,13 @@ const bcrypt = __importStar(require("bcrypt"));
 const user_entity_js_1 = require("./entities/user.entity.js");
 const client_1 = require("../../generated/prisma/client");
 const string_utils_js_1 = require("../common/utils/string.utils.js");
+const nestjs_i18n_1 = require("nestjs-i18n");
 let UsersService = class UsersService {
     prisma;
-    constructor(prisma) {
+    i18n;
+    constructor(prisma, i18n) {
         this.prisma = prisma;
+        this.i18n = i18n;
     }
     async onModuleInit() {
         const users = await this.prisma.user.findMany({
@@ -86,7 +89,7 @@ let UsersService = class UsersService {
         }
         catch (error) {
             if (error instanceof client_1.Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-                throw new common_1.ConflictException('Email already exists');
+                throw new common_1.ConflictException(nestjs_i18n_1.I18nContext.current()?.t('USER_EMAIL_EXISTS'));
             }
             throw error;
         }
@@ -168,7 +171,7 @@ let UsersService = class UsersService {
         }
         catch (error) {
             if (error instanceof client_1.Prisma.PrismaClientKnownRequestError && error.code === 'P2002') {
-                throw new common_1.ConflictException('Email already exists');
+                throw new common_1.ConflictException(nestjs_i18n_1.I18nContext.current()?.t('USER_EMAIL_EXISTS'));
             }
             throw error;
         }
@@ -207,6 +210,7 @@ let UsersService = class UsersService {
 exports.UsersService = UsersService;
 exports.UsersService = UsersService = __decorate([
     (0, common_1.Injectable)(),
-    __metadata("design:paramtypes", [prisma_service_js_1.PrismaService])
+    __metadata("design:paramtypes", [prisma_service_js_1.PrismaService,
+        nestjs_i18n_1.I18nService])
 ], UsersService);
 //# sourceMappingURL=users.service.js.map
